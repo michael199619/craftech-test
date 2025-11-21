@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  boards_db:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - boards_db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  boards:
+    build:
+      context: .
+    container_name: boards
+    depends_on:
+      - redis
+      - boards_db
+    ports:
+      - "8000:8000"
+
+volumes:
+  boards_db_data:
+  redis_data:

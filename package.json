@@ -1,0 +1,48 @@
+{
+  "name": "craftech-test",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --ext .js,.ts .",
+    "lint:fix": "exlint --fix --ext .js,.ts .",
+    "start": "node dist/app.js",
+    "formar": "prettier . --write",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "module": "dist/index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michael199619/craftech-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michael199619/craftech-test/issues"
+  },
+  "homepage": "https://github.com/michael199619/craftech-test#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "env-var": "^7.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "sequelize": "^6.37.7",
+    "swagger": "^0.7.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@types/ws": "^8.18.1",
+    "eslint-plugin-import": "^2.32.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.47.0"
+  }
+}
