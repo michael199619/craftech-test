@@ -1,4 +1,4 @@
-import { BoardsService } from "./boards.service.js";
+import { BoardsService } from './boards.service.js';
 
 /**
  * @openapi

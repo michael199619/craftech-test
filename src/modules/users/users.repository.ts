@@ -1,4 +1,4 @@
-import { User } from "./users.model.js";
+import { User } from './users.model.js';
 
 export class UsersRepository {
   async findAll() {
@@ -9,7 +9,7 @@ export class UsersRepository {
     return User.findByPk(id);
   }
 
-  async create(data: Omit<User, "id">) {
+  async create(data: Omit<User, 'id'>) {
     return User.create(data);
   }
 }

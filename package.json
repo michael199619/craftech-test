@@ -4,13 +4,18 @@
   "description": "",
   "scripts": {
     "build": "tsc",
+    "dev": "nodemon --inspect ",
     "lint": "eslint --ext .js,.ts .",
-    "lint:fix": "exlint --fix --ext .js,.ts .",
+    "lint:fix": "eslint --fix --ext .js,.ts .",
     "start": "node dist/app.js",
-    "formar": "prettier . --write",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier . --write",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
   },
   "module": "dist/index.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "type": "module",
   "repository": {
     "type": "git",
@@ -41,6 +46,8 @@
     "@types/swagger-ui-express": "^4.1.8",
     "@types/ws": "^8.18.1",
     "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "nodemon": "^3.1.11",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.47.0"

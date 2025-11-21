@@ -1,16 +1,3 @@
-import { Express } from "express";
-import WebSocket,{ WebSocketServer } from "ws";
+export function initWebSocket() {}
 
-interface WSClient extends WebSocket {
-  boardId?: string;
-}
-
-let wss: WebSocketServer;
-
-export function initWebSocket(server: Express) {
-
-}
-
-export function broadcastToBoard(boardId: string,event: string,payload: any) {
-
-}
+export function broadcastToBoard() {}

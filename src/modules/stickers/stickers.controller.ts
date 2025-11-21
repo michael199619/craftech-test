@@ -1,4 +1,4 @@
-import { StickersService } from "./stickers.service.js";
+import { StickersService } from './stickers.service.js';
 
 /**
  * @openapi

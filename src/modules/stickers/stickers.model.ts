@@ -1,6 +1,6 @@
-import { DataTypes, Model } from "sequelize";
-import { sequelize } from "../../core/database.js";
-import { Board } from "../boards/boards.model.js";
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../../core/database.js';
+import { Board } from '../boards/boards.model.js';
 
 export class Sticker extends Model {
   declare id: number;
@@ -39,7 +39,7 @@ StickerMeta.init(
       allowNull: false,
     },
   },
-  { sequelize, modelName: "StickerMeta" },
+  { sequelize, modelName: 'StickerMeta' },
 );
 
 Sticker.init(
@@ -74,11 +74,11 @@ Sticker.init(
       allowNull: false,
     },
   },
-  { sequelize, modelName: "Sticker" },
+  { sequelize, modelName: 'Sticker' },
 );
 
-Sticker.belongsTo(Board, { foreignKey: "boardId" });
-Board.hasMany(Sticker, { foreignKey: "boardId" });
+Sticker.belongsTo(Board, { foreignKey: 'boardId' });
+Board.hasMany(Sticker, { foreignKey: 'boardId' });
 
-Sticker.belongsTo(StickerMeta, { foreignKey: "stickerMetaId" });
-StickerMeta.hasOne(Sticker, { foreignKey: "stickerMetaId" });
+Sticker.belongsTo(StickerMeta, { foreignKey: 'stickerMetaId' });
+StickerMeta.hasOne(Sticker, { foreignKey: 'stickerMetaId' });

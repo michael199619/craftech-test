@@ -1,5 +1,5 @@
-import { Board } from "./boards.model.js";
-import { BoardsRepository } from "./boards.repository.js";
+import { Board } from './boards.model.js';
+import { BoardsRepository } from './boards.repository.js';
 
 export class BoardsService {
   constructor(private repo: BoardsRepository) {}
@@ -12,7 +12,7 @@ export class BoardsService {
     return this.repo.findById(id);
   }
 
-  create(data: Omit<Board, "id">) {
+  create(data: Omit<Board, 'id'>) {
     return this.repo.create(data);
   }
 }

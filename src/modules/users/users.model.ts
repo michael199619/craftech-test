@@ -1,9 +1,9 @@
-import { DataTypes, Model } from "sequelize";
-import { sequelize } from "../../core/database.js";
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../../core/database.js';
 
 export enum UserStatus {
-  AUTHORIZED = "AUTHORIZED",
-  ANONYMOUS = "ANONYMOUS",
+  AUTHORIZED = 'AUTHORIZED',
+  ANONYMOUS = 'ANONYMOUS',
 }
 
 export class User extends Model {
@@ -46,5 +46,5 @@ User.init(
       allowNull: true,
     },
   },
-  { sequelize, modelName: "User" },
+  { sequelize, modelName: 'User' },
 );

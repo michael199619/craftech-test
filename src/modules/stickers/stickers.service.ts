@@ -1,5 +1,5 @@
-import { Sticker } from "./stickers.model.js";
-import { StickersRepository } from "./stickers.repository.js";
+import { Sticker } from './stickers.model.js';
+import { StickersRepository } from './stickers.repository.js';
 
 export class StickersService {
   constructor(private repo: StickersRepository) {}
@@ -12,7 +12,7 @@ export class StickersService {
     return this.repo.findById(id);
   }
 
-  create(data: Omit<Sticker, "id">) {
+  create(data: Omit<Sticker, 'id'>) {
     return this.repo.create(data);
   }
 }

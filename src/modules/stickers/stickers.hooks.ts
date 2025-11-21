@@ -1,14 +1,8 @@
-import { broadcastToBoard } from "../../core/websocket.js";
-import { Sticker } from "./stickers.model.js";
+import { broadcastToBoard } from '../../core/websocket.js';
+import { Sticker } from './stickers.model.js';
 
-Sticker.afterCreate((sticker: Sticker) =>
-  broadcastToBoard(sticker.boardId, "sticker:create", sticker),
-);
+Sticker.afterCreate(() => broadcastToBoard());
 
-Sticker.afterUpdate((sticker: Sticker) =>
-  broadcastToBoard(sticker.boardId, "sticker:update", sticker),
-);
+Sticker.afterUpdate(() => broadcastToBoard());
 
-Sticker.afterDestroy((sticker: Sticker) =>
-  broadcastToBoard(sticker.boardId, "sticker:delete", sticker),
-);
+Sticker.afterDestroy(() => broadcastToBoard());

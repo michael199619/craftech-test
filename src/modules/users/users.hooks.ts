@@ -1,7 +1,7 @@
-import { User } from "./users.model.js";
+import { User } from './users.model.js';
 
-User.afterCreate((instance: User) => {});
+User.afterCreate(() => {});
 
-User.afterUpdate((instance: User) => {});
+User.afterUpdate(() => {});
 
-User.afterDestroy((instance: User) => {});
+User.afterDestroy(() => {});

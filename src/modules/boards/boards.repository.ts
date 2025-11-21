@@ -1,4 +1,4 @@
-import { Board } from "./boards.model.js";
+import { Board } from './boards.model.js';
 
 export class BoardsRepository {
   async findAll() {
@@ -9,7 +9,7 @@ export class BoardsRepository {
     return Board.findByPk(id);
   }
 
-  async create(data: Omit<Board, "id">) {
+  async create(data: Omit<Board, 'id'>) {
     return Board.create(data);
   }
 }

@@ -1,6 +1,6 @@
-import { DataTypes, Model } from "sequelize";
-import { sequelize } from "../../core/database.js";
-import { User } from "../users/users.model.js";
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../../core/database.js';
+import { User } from '../users/users.model.js';
 
 export class UsersBoards extends Model {
   declare id: string;
@@ -38,11 +38,11 @@ Board.init(
       defaultValue: false,
     },
   },
-  { sequelize, modelName: "Board" },
+  { sequelize, modelName: 'Board' },
 );
 
-Board.belongsTo(User, { as: "author", foreignKey: "authorId" });
-User.hasMany(Board, { foreignKey: "authorId" });
+Board.belongsTo(User, { as: 'author', foreignKey: 'authorId' });
+User.hasMany(Board, { foreignKey: 'authorId' });
 
 UsersBoards.init(
   {
@@ -62,8 +62,8 @@ UsersBoards.init(
       allowNull: false,
     },
   },
-  { sequelize, modelName: "UsersBoards" },
+  { sequelize, modelName: 'UsersBoards' },
 );
 
-User.belongsToMany(Board, { through: UsersBoards, foreignKey: "userId" });
-Board.belongsToMany(User, { through: UsersBoards, foreignKey: "boardId" });
+User.belongsToMany(Board, { through: UsersBoards, foreignKey: 'userId' });
+Board.belongsToMany(User, { through: UsersBoards, foreignKey: 'boardId' });

@@ -1,1 +1,1 @@
-import "./boards.model.js";
+import './boards.model.js';

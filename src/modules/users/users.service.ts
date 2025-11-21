@@ -1,5 +1,5 @@
-import { User } from "./users.model.js";
-import { UsersRepository } from "./users.repository.js";
+import { User } from './users.model.js';
+import { UsersRepository } from './users.repository.js';
 
 export class UsersService {
   constructor(private repo: UsersRepository) {}
@@ -12,7 +12,7 @@ export class UsersService {
     return this.repo.findById(id);
   }
 
-  create(data: Omit<User, "id">) {
+  create(data: Omit<User, 'id'>) {
     return this.repo.create(data);
   }
 }

@@ -1,4 +1,4 @@
-import { Sticker } from "./stickers.model.js";
+import { Sticker } from './stickers.model.js';
 
 export class StickersRepository {
   async findAll() {
@@ -9,7 +9,7 @@ export class StickersRepository {
     return Sticker.findByPk(id);
   }
 
-  async create(data: Omit<Sticker, "id">) {
+  async create(data: Omit<Sticker, 'id'>) {
     return Sticker.create(data);
   }
 }
