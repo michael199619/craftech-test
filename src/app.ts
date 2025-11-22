@@ -1,5 +1,5 @@
 import express from 'express';
-import { sequelize } from './core/database.js';
+import { sequelize } from './core/database/database.js';
 import { setupSwagger } from './core/swagger.js';
 import { initWebSocket } from './core/websocket.js';
 
@@ -7,10 +7,19 @@ import boardsRouter from './modules/boards/boards.router.js';
 import stickersRouter from './modules/stickers/stickers.router.js';
 import usersRouter from './modules/users/users.router.js';
 
+import { umzug } from './core/database/umzug.js';
 import { appConfig } from './core/env.js';
 import './modules/users/index.js';
 
-export async function createApp() {
+export async function bootstrap() {
+  try {
+    await umzug.up();
+    console.log('migration completed');
+  } catch (e) {
+    console.log('migration error', e);
+    throw e;
+  }
+
   const app = express();
 
   app.use(express.json());
@@ -38,4 +47,4 @@ export async function createApp() {
   );
 }
 
-createApp();
+bootstrap();

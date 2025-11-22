@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../../core/database.js';
+import sequelize from '../../core/database/database.js';
 
 export enum UserStatus {
   AUTHORIZED = 'AUTHORIZED',

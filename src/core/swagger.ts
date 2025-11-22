@@ -17,7 +17,7 @@ export function setupSwagger(app: Express) {
       },
     },
 
-    apis: [path.join(__dirname, '../../**/*.ts')],
+    apis: [path.join(__dirname, '../modules/**/*.js')],
   };
 
   const spec = swaggerJsdoc(options);

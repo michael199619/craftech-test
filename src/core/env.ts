@@ -1,12 +1,13 @@
 import dotenv from 'dotenv';
 import env from 'env-var';
 import { SignOptions } from 'jsonwebtoken';
+import { NodeEnv } from './enums.js';
 
 dotenv.config();
 
 export const appConfig = {
   port: env.get('PORT').default('3000').asPortNumber(),
-  nodeEnv: env.get('NODE_ENV').default('development').asString(),
+  nodeEnv: env.get('NODE_ENV').default(NodeEnv.DEV).asString() as NodeEnv,
 };
 
 export const redisConfig = {

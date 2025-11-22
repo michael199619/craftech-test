@@ -10,6 +10,7 @@
     "start": "node dist/app.js",
     "format": "prettier . --write",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "db:migrate": "npx sequelize-cli db:migrate",
     "prepare": "husky"
   },
   "module": "dist/index.js",
@@ -39,6 +40,7 @@
     "swagger": "^0.7.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "umzug": "^3.8.2",
     "ws": "^8.18.3"
   },
   "devDependencies": {

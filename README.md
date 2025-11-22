@@ -2,7 +2,7 @@
 
 # schema database
 
-![Image alt](https://github.com/michael199619/craftech-test/raw/main/assets/database.png)
+![Image alt](https://github.com/michael199619/craftech-test/raw/main/assets/database.svg)
 https://www.drawdb.app/editor?shareId=78fdadd1f52f9ece71c5cfa76822e175
 
 # start

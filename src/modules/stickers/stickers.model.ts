@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../../core/database.js';
+import { sequelize } from '../../core/database/database.js';
 import { Board } from '../boards/boards.model.js';
 
 export class Sticker extends Model {
