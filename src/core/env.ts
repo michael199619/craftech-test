@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import env from 'env-var';
+import { SignOptions } from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -24,5 +25,12 @@ export const postgresConfig = {
 
 export const jwtConfig = {
   secret: env.get('JWT_SECRET').default('your-super-secret-jwt-key').asString(),
-  expiresIn: env.get('JWT_EXPIRES_IN').default('24h').asString(),
+  access: env
+    .get('JWT_ACCEESS_EXPIRES_IN')
+    .default('15m')
+    .asString() as SignOptions['expiresIn'],
+  refresh: env
+    .get('JWT_REFRESH_EXPIRES_IN')
+    .default('7d')
+    .asString() as SignOptions['expiresIn'],
 };

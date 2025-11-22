@@ -28,9 +28,12 @@
   },
   "homepage": "https://github.com/michael199619/craftech-test#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "env-var": "^7.5.0",
     "express": "^5.1.0",
+    "ioredis": "^5.8.2",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.3",
     "sequelize": "^6.37.7",
     "swagger": "^0.7.5",
@@ -40,7 +43,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",

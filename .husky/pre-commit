@@ -10,4 +10,4 @@ v=${b%%[)| ]*}
 
 export PATH="$NVM_DIR/versions/node/$v/bin:$PATH"
 
-npm run lint:fix && npm run format
+npm run build && npm run lint:fix && npm run format

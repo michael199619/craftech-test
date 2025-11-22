@@ -45,6 +45,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+
+    loginedAt: {
+      type: DataTypes.DATE,
+    },
   },
   { sequelize, modelName: 'User' },
 );
