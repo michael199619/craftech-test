@@ -15,9 +15,118 @@ export function setupSwagger(app: Express) {
         title: 'Api for boards',
         version: '0.1.0',
       },
+      components: {
+        schemas: {
+          UserResponse: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', format: 'uuid' },
+              name: { type: 'string' },
+              login: { type: 'string' },
+              status: { type: 'string' },
+              createdAt: { type: 'string', format: 'date-time' },
+              updatedAt: { type: 'string', format: 'date-time' },
+            },
+          },
+          BoardResponse: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', format: 'uuid' },
+              name: { type: 'string' },
+              authorId: { type: 'string', format: 'uuid' },
+              workspaceId: { type: 'string', format: 'uuid' },
+              private: { type: 'boolean' },
+              createdAt: { type: 'string', format: 'date-time' },
+              updatedAt: { type: 'string', format: 'date-time' },
+            },
+          },
+          BoardWithStickersResponse: {
+            allOf: [
+              { $ref: '#/components/schemas/BoardResponse' },
+              {
+                type: 'object',
+                properties: {
+                  maxWidth: { type: 'number' },
+                  maxHeight: { type: 'number' },
+                  stickers: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', format: 'uuid' },
+                        name: { type: 'string' },
+                        description: { type: 'string' },
+                        meta: {
+                          type: 'object',
+                          properties: {
+                            positionX: { type: 'number' },
+                            positionY: { type: 'number' },
+                            width: { type: 'number' },
+                            height: { type: 'number' },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          StickerResponse: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', format: 'uuid' },
+              name: { type: 'string' },
+              description: { type: 'string' },
+              boardId: { type: 'string', format: 'uuid' },
+              stickerMetaId: { type: 'string', format: 'uuid' },
+              createdAt: { type: 'string', format: 'date-time' },
+              updatedAt: { type: 'string', format: 'date-time' },
+              meta: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string', format: 'uuid' },
+                  positionX: { type: 'number' },
+                  positionY: { type: 'number' },
+                  index: { type: 'number' },
+                  width: { type: 'number' },
+                  height: { type: 'number' },
+                },
+              },
+            },
+          },
+          WorkspaceResponse: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', format: 'uuid' },
+              name: { type: 'string' },
+              authorId: { type: 'string', format: 'uuid' },
+              createdAt: { type: 'string', format: 'date-time' },
+              updatedAt: { type: 'string', format: 'date-time' },
+            },
+          },
+          AuthResponse: {
+            type: 'object',
+            properties: {
+              accessToken: { type: 'string' },
+              refreshToken: { type: 'string' },
+              userId: { type: 'string', format: 'uuid' },
+            },
+          },
+          Pagination: {
+            type: 'object',
+            properties: {
+              page: { type: 'integer' },
+              limit: { type: 'integer' },
+              total: { type: 'integer' },
+              totalPages: { type: 'integer' },
+            },
+          },
+        },
+      },
     },
 
-    apis: [path.join(__dirname, '../modules/**/*.js')],
+    apis: [path.join(__dirname, '../modules/**/*.js')], // todo: исправить
   };
 
   const spec = swaggerJsdoc(options);

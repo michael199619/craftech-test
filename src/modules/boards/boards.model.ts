@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../core/database/database.js';
 import { User } from '../users/users.model.js';
+import { Role, Workspace } from '../workspaces/workspaces.model.js';
 
 export enum HistoryOperation {
   CREATE = 'CREATE',
@@ -18,6 +19,7 @@ export class Board extends Model {
   declare id: string;
   declare name: string;
   declare authorId?: string;
+  declare workspaceId?: string;
   declare private: boolean;
 }
 
@@ -55,12 +57,20 @@ Board.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+
+    workspaceId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
   },
   { sequelize, modelName: 'Board' },
 );
 
 Board.belongsTo(User, { as: 'author', foreignKey: 'authorId' });
 User.hasMany(Board, { foreignKey: 'authorId' });
+
+Board.belongsTo(Workspace, { foreignKey: 'workspaceId', as: 'workspace' });
+Workspace.hasMany(Board, { foreignKey: 'workspaceId', as: 'boards' });
 
 UsersBoards.init(
   {
@@ -79,12 +89,33 @@ UsersBoards.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
+
+    role: {
+      type: DataTypes.ENUM(...Object.values(Role)),
+      allowNull: false,
+      defaultValue: Role.VIEWER,
+    },
   },
   { sequelize, modelName: 'UsersBoards' },
 );
 
-User.belongsToMany(Board, { through: UsersBoards, foreignKey: 'userId' });
-Board.belongsToMany(User, { through: UsersBoards, foreignKey: 'boardId' });
+User.belongsToMany(Board, {
+  through: UsersBoards,
+  foreignKey: 'userId',
+  as: 'boards',
+});
+
+Board.belongsToMany(User, {
+  through: UsersBoards,
+  foreignKey: 'boardId',
+  as: 'users',
+});
+
+User.hasMany(UsersBoards, { foreignKey: 'userId' });
+UsersBoards.belongsTo(User, { foreignKey: 'userId' });
+
+Board.hasMany(UsersBoards, { foreignKey: 'boardId' });
+UsersBoards.belongsTo(Board, { foreignKey: 'boardId' });
 
 BoardHistory.init(
   {

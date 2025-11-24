@@ -1,18 +1,59 @@
+import authService from '../../core/auth/auth.service.js';
+import {
+  UpsertUserDto,
+  UserResponse,
+  UserResponseWithPassword,
+} from './users.dto.js';
 import { User } from './users.model.js';
 import { UsersRepository } from './users.repository.js';
 
 export class UsersService {
   constructor(private repo: UsersRepository) {}
 
-  getAll() {
-    return this.repo.findAll();
+  async getAll(page: number = 1, limit: number = 20) {
+    const result = await this.repo.findAll(page, limit);
+
+    return {
+      data: result.data.map(this.mapToResponse),
+      pagination: result.pagination,
+    };
   }
 
-  getById(id: number) {
-    return this.repo.findById(id);
+  async getById(
+    id: string,
+    selectPassword: boolean = true,
+  ): Promise<UserResponse | UserResponseWithPassword | null> {
+    const user = await this.repo.findById(id, selectPassword);
+    return user ? this.mapToResponse(user) : null;
   }
 
-  create(data: Omit<User, 'id'>) {
-    return this.repo.create(data);
+  async findByLogin(login: string, id?: string) {
+    return this.repo.findByLogin(login, id);
+  }
+
+  async findByRegistrationCode(registrationCode: string) {
+    return this.repo.findByRegistrationCode(registrationCode);
+  }
+
+  async upsert(data: UpsertUserDto): Promise<UserResponseWithPassword> {
+    return await this.repo.upsert({
+      ...data,
+      password: await authService.getBcryptHashPassword(data.password),
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    const user = await this.repo.findById(id);
+
+    if (!user) {
+      return;
+    }
+
+    await this.repo.delete(id);
+  }
+
+  private mapToResponse(user: User): UserResponse {
+    const { password, ...userData } = user.toJSON();
+    return userData;
   }
 }

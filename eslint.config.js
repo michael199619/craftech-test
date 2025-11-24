@@ -31,6 +31,8 @@ export default tseslint.config(
       '@typescript-eslint/no-var-requires': 'off',
       'no-mixed-spaces-and-tabs': 'off',
       camelcase: 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
   {

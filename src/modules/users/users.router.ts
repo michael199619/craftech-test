@@ -9,7 +9,9 @@ const controller = new UsersController(service);
 
 const router = Router();
 
-router.get('/', controller.getUsers);
-router.post('/', controller.createUser);
+router.get('/', controller.getAll);
+router.get('/:id', controller.getById);
+router.put('/:id', controller.update);
+router.delete('/:id', controller.delete);
 
 export default router;

@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import { jwtConfig } from '../env.js';
+import logger from '../logger.js';
 import redis from '../redis.js';
 import { AuthOptions, RefreshPayload, TokenType } from './auth.interface.js';
 
@@ -33,7 +34,7 @@ export class AuthService {
     return bcrypt.hash(str, salt);
   }
 
-  private async saveRefreshHash(
+  async saveRefreshHash(
     userId: string,
     jti: string,
     token: string,
@@ -121,7 +122,7 @@ export class AuthService {
       const ttlSec = Math.max(1, exp! - Math.floor(Date.now() / 1000));
       await redis.set(this.accessRevokeKey(userId, jti), '1', 'EX', ttlSec);
     } catch (e) {
-      console.error(e);
+      logger.debug('logout error', e);
     }
   }
 
@@ -173,7 +174,7 @@ export class AuthService {
     return result as TokenType;
   }
 
-  private async signTokens(userId: string) {
+  async signTokens(userId: string) {
     const jti = randomUUID();
     const sessionVersion = await this.getSessionVersion(userId);
 
