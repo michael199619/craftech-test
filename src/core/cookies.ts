@@ -1,4 +1,4 @@
-import cookie from 'cookie-parser';
+import cookie from 'cookie';
 import { Request, Response } from 'express';
 
 export interface Session {
@@ -20,7 +20,7 @@ export function setSession(res: Response, session: Session) {
 }
 
 export function getSession(req: Request): Session | null {
-  const user = (req.cookies || cookie.JSONCookie(req.headers.cookie || '')) as
+  const user = (req.cookies || cookie.parse(req.headers.cookie || '')) as
     | CookieSession
     | undefined;
 

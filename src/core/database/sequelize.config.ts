@@ -1,5 +1,5 @@
 import { Options } from 'sequelize';
-import { postgresConfig } from '../env.js';
+import { postgresConfig } from '../config.js';
 
 const database: Options = {
   ...postgresConfig,

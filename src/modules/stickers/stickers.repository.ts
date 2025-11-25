@@ -28,7 +28,7 @@ export class StickersRepository {
 
   async findById(id: string) {
     return Sticker.findByPk(id, {
-      include: ['StickerMeta'],
+      include: ['meta'],
     });
   }
 

@@ -33,7 +33,15 @@ export class BoardsRepository {
     );
 
     const { count, rows } = await Board.findAndCountAll({
-      attributes: ['id', 'name'],
+      attributes: [
+        'id',
+        'name',
+        'authorId',
+        'private',
+        'createdAt',
+        'updatedAt',
+        'workspaceId',
+      ],
 
       where: {
         [Op.and]: [

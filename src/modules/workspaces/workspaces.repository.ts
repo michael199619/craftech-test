@@ -11,7 +11,6 @@ export class WorkspacesRepository {
     const offset = (page - 1) * limit;
 
     const { count, rows } = await Workspace.findAndCountAll({
-      include: [],
       limit,
       offset,
       order: [['createdAt', 'DESC']],

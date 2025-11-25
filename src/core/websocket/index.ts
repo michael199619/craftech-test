@@ -15,7 +15,6 @@ import {
 } from './rooms.js';
 
 let wss: WebSocketServer;
-const boardRooms = new Map<string, Set<WSClient>>();
 
 export function initWebSocket(server: Server) {
   wss = new WebSocketServer({ server });
@@ -24,6 +23,7 @@ export function initWebSocket(server: Server) {
     ws.isAlive = true;
 
     const userBoard = await authenticateConnection(ws, req);
+    console.log(9);
 
     if (!userBoard) {
       return;
@@ -68,7 +68,7 @@ export function initWebSocket(server: Server) {
         const isOffline = removeUserConnection(ws.userId, ws);
 
         if (isOffline) {
-          broadcastToBoard(ws.userId, ClientEvents.USER_ONLINE, {
+          broadcastToBoard(ws.boardId!, ClientEvents.USER_ONLINE, {
             userId: ws.userId,
             isOnline: false,
           });

@@ -12,8 +12,8 @@ import stickersRouter from './modules/stickers/stickers.router.js';
 import usersRouter from './modules/users/users.router.js';
 import workspacesRouter from './modules/workspaces/workspaces.router.js';
 
+import { appConfig } from './core/config.js';
 import { umzug } from './core/database/umzug.js';
-import { appConfig } from './core/env.js';
 
 import './modules/boards/index.js';
 import './modules/stickers/index.js';

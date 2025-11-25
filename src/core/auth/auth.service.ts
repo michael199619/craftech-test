@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
-import { jwtConfig } from '../env.js';
+import { jwtConfig } from '../config.js';
 import logger from '../logger.js';
 import redis from '../redis.js';
 import { AuthOptions, RefreshPayload, TokenType } from './auth.interface.js';

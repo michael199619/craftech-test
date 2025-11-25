@@ -3,6 +3,8 @@ import path from 'path';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { fileURLToPath } from 'url';
+import { appConfig } from './config.js';
+import { NodeEnv } from './enums.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -146,4 +148,11 @@ export function setupSwagger(app: Express) {
 
   const spec = swaggerJsdoc(options);
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec));
+
+  if (appConfig.nodeEnv === NodeEnv.DEV) {
+    app.get('/docs.json', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(spec);
+    });
+  }
 }

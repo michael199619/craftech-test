@@ -10,7 +10,7 @@ export async function authenticateConnection(
   req: Req,
 ): Promise<UserBoard | null> {
   try {
-    const url = new URL(req.url || '');
+    const url = new URL(`${req.headers.host}${req.url}`);
 
     const session = getSession(req);
     let user: UserResponse | null = null;
@@ -36,7 +36,7 @@ export async function authenticateConnection(
     };
   } catch (error) {
     logger.error('WebSocket authentication error', { error });
-    ws.close(400, 'Unauthorized: Authentication error');
+    ws.close(1008, 'Unauthorized: Authentication error');
     return null;
   }
 }

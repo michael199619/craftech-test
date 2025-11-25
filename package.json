@@ -31,6 +31,7 @@
   "homepage": "https://github.com/michael199619/craftech-test#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cookie": "^1.0.2",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "env-var": "^7.5.0",
