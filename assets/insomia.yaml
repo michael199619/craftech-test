@@ -1,0 +1,671 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1764046303196
+  modified: 1764046303196
+  description: ""
+collection:
+  - url: "{{ _.base_url }}/auth/signup"
+    name: Регистрация (система доступна без регистрации)
+    meta:
+      id: req_5205521d8be74ded828ece070be10b05
+      created: 1764047185474
+      modified: 1764047185474
+      isPrivate: false
+      description: Если у пользователя есть сессия ввиде анонима, то данные пишутся в
+        этого пользователя
+      sortKey: -1764047185474
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "string",
+          "login": "string",
+          "password": "string"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/auth/refresh-token"
+    name: Рефреш токен
+    meta:
+      id: req_2b69109ecc8945d380b784a254e0b6f0
+      created: 1764047185475
+      modified: 1764047185475
+      isPrivate: false
+      description: проверятся сессия в куках
+      sortKey: -1764047185475
+    method: POST
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/auth/login"
+    name: Вход
+    meta:
+      id: req_3b1eb362e76543d3a30073523c76153d
+      created: 1764047185475
+      modified: 1764047495314
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185475
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "login": "string",
+          "password": "string"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/auth/me"
+    name: Получить свой профиль
+    meta:
+      id: req_f03fd66303b740fc94bce2fc25f54264
+      created: 1764047185475
+      modified: 1764047185475
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185475
+    method: GET
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/boards"
+    name: Получить все доски
+    meta:
+      id: req_35faf805bc0f4664868b266da5eec995
+      created: 1764047185476
+      modified: 1764047185476
+      isPrivate: false
+      description: Исключает все воркспейсы
+      sortKey: -1764047185476
+    method: GET
+    parameters:
+      - name: page
+        value: "1"
+        disabled: true
+      - name: limit
+        value: "20"
+        disabled: true
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/boards/{{ _.id }}"
+    name: Получить доску по идентификатору
+    meta:
+      id: req_6f8762b654a1477a84fecf6f92ed4e88
+      created: 1764047185476
+      modified: 1764047185476
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185476
+    method: GET
+    parameters:
+      - name: width
+        value: "1280"
+        disabled: true
+      - name: height
+        value: "740"
+        disabled: true
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/boards"
+    name: Создать доску
+    meta:
+      id: req_a0e5d9834caf44d8bad73604cad30bd2
+      created: 1764047185476
+      modified: 1764047185476
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185476
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "string",
+          "private": true,
+          "workspaceId": "string"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/boards/{{ _.id }}"
+    name: Редактировать доску
+    meta:
+      id: req_da73a5bd73b44279ad296611b1129b25
+      created: 1764047185476
+      modified: 1764047185476
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185476
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "string",
+          "private": true,
+          "workspaceId": "string"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/boards/{{ _.id }}"
+    name: Удалить доску
+    meta:
+      id: req_00b3226632824e90b96ef81283dcb90a
+      created: 1764047185477
+      modified: 1764047185477
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185477
+    method: DELETE
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/boards/{{ _.id }}/history"
+    name: Получить действия по доске
+    meta:
+      id: req_d0ecf935e64448b1ae7eade34e809c3b
+      created: 1764047185477
+      modified: 1764047185477
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185477
+    method: GET
+    parameters:
+      - name: page
+        value: "1"
+        disabled: true
+      - name: limit
+        value: "20"
+        disabled: true
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/stickers"
+    name: Получить все стикеры
+    meta:
+      id: req_21874e4ce9c74c9791b1272caea3d427
+      created: 1764047185478
+      modified: 1764047185478
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185478
+    method: GET
+    parameters:
+      - name: boardId
+        value: string
+        disabled: true
+      - name: width
+        value: "1280"
+        disabled: true
+      - name: height
+        value: "740"
+        disabled: true
+      - name: page
+        value: "1"
+        disabled: true
+      - name: limit
+        value: "20"
+        disabled: true
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/stickers"
+    name: Создать стикер
+    meta:
+      id: req_e30d52d045434ad6b9eb20697d4cfc09
+      created: 1764047185478
+      modified: 1764047185478
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185478
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "string",
+          "description": "string",
+          "boardId": "string",
+          "positionX": 0,
+          "positionY": 0,
+          "index": 0
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/users"
+    name: Получить всех пользователей
+    meta:
+      id: req_007bb8f6983b431f9064697cbb6ba27d
+      created: 1764047185479
+      modified: 1764047185479
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185479
+    method: GET
+    parameters:
+      - name: page
+        value: "1"
+        disabled: true
+      - name: limit
+        value: "20"
+        disabled: true
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/stickers/{{ _.id }}"
+    name: Редактировать стикер
+    meta:
+      id: req_c1e6762a3108444a830a0df1c3d7eacc
+      created: 1764047185479
+      modified: 1764047185479
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185479
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "string",
+          "description": "string",
+          "positionX": 0,
+          "positionY": 0,
+          "index": 0
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/stickers/{{ _.id }}"
+    name: Удалить стикер
+    meta:
+      id: req_e50267ef1aeb45e29db84f173306a978
+      created: 1764047185479
+      modified: 1764047185479
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185479
+    method: DELETE
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/users/{{ _.id }}"
+    name: Получить пользователя по идентификатору
+    meta:
+      id: req_00fb8c65db86443396d08d2a31afa86a
+      created: 1764047185480
+      modified: 1764047185480
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185480
+    method: GET
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/users/{{ _.id }}"
+    name: Редактировать пользователя
+    meta:
+      id: req_2074f0cd7f0c4891b2ce9945973ab425
+      created: 1764047185480
+      modified: 1764047185480
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185480
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "string",
+          "login": "string",
+          "password": "string",
+          "status": "string"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/workspaces"
+    name: Получить воркспейсы
+    meta:
+      id: req_b47bd95be47643099930b58b3ddf711a
+      created: 1764047185480
+      modified: 1764047185480
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185480
+    method: GET
+    parameters:
+      - name: page
+        value: "1"
+        disabled: true
+      - name: limit
+        value: "20"
+        disabled: true
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/users/{{ _.id }}"
+    name: Удалить пользователя
+    meta:
+      id: req_e2b240782f1344d4ba7b51186815b449
+      created: 1764047185480
+      modified: 1764047185480
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185480
+    method: DELETE
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/workspaces"
+    name: Создать воркспейс
+    meta:
+      id: req_13570d41e76644a6889ae4f23e366f85
+      created: 1764047185481
+      modified: 1764047185481
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185481
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "string"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/workspaces/{{ _.id }}"
+    name: Получить воркспейс по идентификатору
+    meta:
+      id: req_307371bd942446fba807e8642cb03492
+      created: 1764047185481
+      modified: 1764047185481
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185481
+    method: GET
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/workspaces/{{ _.id }}"
+    name: Редактировать воркспейс
+    meta:
+      id: req_3a06f869f33d44b7ba38353a0584320b
+      created: 1764047185481
+      modified: 1764047185481
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185481
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "string"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/workspaces/{{ _.id }}"
+    name: Удалить воркспейс
+    meta:
+      id: req_67b55a27f2c94d96acf68b4896fa8086
+      created: 1764047185481
+      modified: 1764051159867
+      isPrivate: false
+      description: ""
+      sortKey: -1764047185481
+    method: DELETE
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}"
+    name: Подключиться к доске
+    meta:
+      id: ws-req_f99de3f525054483be2de3387c8adb8c
+      created: 1764048744466
+      modified: 1764051707309
+      description: ""
+      sortKey: -1764048744466
+    settings:
+      encodeUrl: true
+      cookies:
+        store: true
+        send: true
+      followRedirects: global
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    parameters:
+      - name: boardId
+        value: 76de1577-95ec-4af5-8ba0-f6fd4c0b3a7b
+        description: ""
+        disabled: false
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1764046746489
+    modified: 1764051022660
+  cookies:
+    - id: 99c8b2be-1cab-4e2f-9cf2-365f8a8daf7b
+      key: access_token
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODAxZGI2Yi1hMmI4LTQ2NmItOGY5MS1hYjU3MDllZjgyOGQiLCJqdGkiOiIyYTJhODc4ZS00NjI3LTQ3MWEtOTRkZC1hMmYxYzQ0NTQ4ZTciLCJzZXNzaW9uVmVyc2lvbiI6MSwiaWF0IjoxNzY0MDUxMDIyLCJleHAiOjE3NjQwNTE5MjJ9.BUoHVY2GrYnZdAsbzEyrUOVflE4qUAR3z7T99UTBlYM
+      domain: localhost
+      path: /
+      secure: false
+      httpOnly: false
+      hostOnly: true
+    - id: c4441594-6149-4262-9ce6-8dc6a9bb294e
+      key: refresh_token
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODAxZGI2Yi1hMmI4LTQ2NmItOGY5MS1hYjU3MDllZjgyOGQiLCJqdGkiOiIyYTJhODc4ZS00NjI3LTQ3MWEtOTRkZC1hMmYxYzQ0NTQ4ZTciLCJzZXNzaW9uVmVyc2lvbiI6MSwiaWF0IjoxNzY0MDUxMDIyLCJleHAiOjE3NjQ2NTU4MjJ9.jT3UERnxWm6mDpmz7099wke0Qraj7peN9j6MaKeU708
+      domain: localhost
+      path: /
+      secure: false
+      httpOnly: false
+      hostOnly: true
+    - id: d80d94b3-689d-4abe-961a-33479b2c06da
+      key: user_id
+      value: 1801db6b-a2b8-466b-8f91-ab5709ef828d
+      domain: localhost
+      path: /
+      secure: false
+      httpOnly: false
+      hostOnly: true
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1764046746487
+    modified: 1764047185470
+    isPrivate: false
+  data:
+    base_url: "{{ _.scheme }}://{{ _.host }}{{ _.base_path }}"
+  subEnvironments:
+    - name: OpenAPI env example.com
+      meta:
+        id: env_2dd53e8925dc46cc8b412ae140e93b86
+        created: 1764046898500
+        modified: 1764047606021
+        isPrivate: false
+        sortKey: 1764046898500
+      data:
+        scheme: http
+        base_path: ""
+        host: localhost:8000
+    - name: OpenAPI env example.com
+      meta:
+        id: env_f8ab0443994e4487a20c521f49b4003b
+        created: 1764047185473
+        modified: 1764047185473
+        isPrivate: false
+        sortKey: 1764047185473
+      data:
+        scheme: http
+        base_path: ""
+        host: example.com

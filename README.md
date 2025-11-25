@@ -11,6 +11,9 @@ https://www.drawdb.app/editor?shareId=78fdadd1f52f9ece71c5cfa76822e175
 cp .env.example .env
 docker-compose up
 ```
+swagger - http://localhost:8000/docs
+ws - http://localhost:8000?board=UUID (для коннекта нужно войти в система, тк нужны куки)
+файл инсомнии здесь https://github.com/michael199619/craftech-test/raw/main/assets/insomnia.yaml
 
 # local development
 
