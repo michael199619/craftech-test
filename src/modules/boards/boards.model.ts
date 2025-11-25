@@ -167,4 +167,8 @@ BoardHistory.init(
 );
 
 BoardHistory.belongsTo(User, { as: 'author', foreignKey: 'authorId' });
-BoardHistory.belongsTo(Board, { as: 'board', foreignKey: 'boardId' });
+BoardHistory.belongsTo(Board, {
+  as: 'board',
+  foreignKey: 'boardId',
+  onDelete: 'SET NULL',
+});

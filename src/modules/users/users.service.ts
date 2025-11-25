@@ -31,10 +31,6 @@ export class UsersService {
     return this.repo.findByLogin(login, id);
   }
 
-  async findByRegistrationCode(registrationCode: string) {
-    return this.repo.findByRegistrationCode(registrationCode);
-  }
-
   async upsert(data: UpsertUserDto): Promise<UserResponseWithPassword> {
     return await this.repo.upsert({
       ...data,

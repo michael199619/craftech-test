@@ -14,6 +14,7 @@ import workspacesRouter from './modules/workspaces/workspaces.router.js';
 
 import { umzug } from './core/database/umzug.js';
 import { appConfig } from './core/env.js';
+
 import './modules/boards/index.js';
 import './modules/stickers/index.js';
 import './modules/users/index.js';
@@ -40,7 +41,6 @@ export async function bootstrap() {
   app.use('/boards', authGuard, boardsRouter);
   app.use('/stickers', authGuard, stickersRouter);
 
-  // Error handler must be last
   app.use(errorHandler);
 
   const server = app.listen(appConfig.port, () =>
@@ -52,7 +52,6 @@ export async function bootstrap() {
   initWebSocket(server);
 }
 
-bootstrap().catch((error) => {
-  logger.error('Failed to start application', { error });
-  process.exit(1);
-});
+bootstrap().catch((error) =>
+  logger.error('Failed to start application', { error }),
+);

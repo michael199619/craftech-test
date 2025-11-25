@@ -119,10 +119,10 @@ export class StickersController {
    */
   create = asyncHandler(
     async (req: Req<{}, CreateStickerDto>, res: Response) => {
-      const sticker = await this.service.create(req.body);
+      const sticker = await this.service.create(req.body, req.user.id);
 
       logger.info('Sticker created', { stickerId: sticker.id });
-      res.status(201).json(sticker);
+      res.status(200).json(sticker);
     },
   );
 
@@ -169,7 +169,7 @@ export class StickersController {
     async (req: Req<{ id: string }, UpdateStickerDto>, res: Response) => {
       const { id } = req.params;
 
-      const sticker = await this.service.update(id, req.body);
+      const sticker = await this.service.update(id, req.body, req.user.id);
       if (!sticker) {
         throw new HandlerException(404, 'Стикер не найден');
       }
@@ -197,7 +197,7 @@ export class StickersController {
   delete = asyncHandler(async (req: Req<{ id: string }>, res: Response) => {
     const { id } = req.params;
 
-    const sticker = await this.service.delete(id);
+    const sticker = await this.service.delete(id, req.user.id);
     if (!sticker) {
       throw new HandlerException(404, 'Стикер не найден');
     }

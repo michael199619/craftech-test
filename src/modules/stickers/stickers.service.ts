@@ -20,25 +20,29 @@ export class StickersService {
     return sticker ? this.mapToResponse(sticker) : null;
   }
 
-  async create(data: CreateStickerDto): Promise<StickerResponse> {
-    const sticker = await this.repo.create(data);
+  async create(
+    data: CreateStickerDto,
+    userId?: string,
+  ): Promise<StickerResponse> {
+    const sticker = await this.repo.create(data, userId);
     return this.mapToResponse(sticker);
   }
 
   async update(
     id: string,
     data: UpdateStickerDto,
+    userId?: string,
   ): Promise<StickerResponse | null> {
-    const sticker = await this.repo.update(id, data);
+    const sticker = await this.repo.update(id, data, userId);
     return sticker ? this.mapToResponse(sticker) : null;
   }
 
-  async delete(id: string): Promise<StickerResponse | null> {
-    const sticker = await this.repo.delete(id);
+  async delete(id: string, userId?: string): Promise<StickerResponse | null> {
+    const sticker = await this.repo.delete(id, userId);
     return sticker ? this.mapToResponse(sticker) : null;
   }
 
-  async updateStickersPositions(stickers: StickerMetaDto[]) {
+  async updateStickersPositions(stickers: StickerMetaDto[], userId?: string) {
     return this.repo.updateStickersPositions(stickers);
   }
 

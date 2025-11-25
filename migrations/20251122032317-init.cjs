@@ -15,10 +15,6 @@ module.exports = {
         allowNull: false,
         defaultValue: 'ANONYMOUS',
       },
-      registrationCode: {
-        type: DataTypes.STRING(255),
-        comment: 'код нужен для привязки анонима',
-      },
       loginedAt: { type: DataTypes.DATE, allowNull: false },
     });
 

@@ -164,7 +164,7 @@ export class BoardsController {
     });
 
     logger.info('Board created', { boardId: board.id, userId: req.user.id });
-    res.status(201).json(board);
+    res.status(200).json(board);
   });
 
   /**
@@ -215,7 +215,7 @@ export class BoardsController {
         throw new HandlerException(404, 'Workspace не найден');
       }
 
-      const board = await this.service.update(id, body);
+      const board = await this.service.update(id, body, req.user.id);
       if (!board) {
         throw new HandlerException(404, 'Доска не найдена');
       }
@@ -243,7 +243,7 @@ export class BoardsController {
   delete = asyncHandler(async (req: Req<{ id: string }>, res: Response) => {
     const { id } = req.params;
 
-    const board = await this.service.delete(id);
+    const board = await this.service.delete(id, req.user.id);
     if (!board) {
       throw new HandlerException(404, 'Доска не найдена');
     }

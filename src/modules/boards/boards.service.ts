@@ -2,6 +2,7 @@ import {
   BoardResponse,
   BoardWithStickersResponse,
   CreateBoardDto,
+  CreateHistoryDto,
   GetByIdDto,
   UpdateBoardDto,
 } from './boards.dto.js';
@@ -25,7 +26,11 @@ export class BoardsService {
     dto: GetByIdDto,
   ): Promise<BoardWithStickersResponse | null> {
     const board = await this.repo.findById(id, dto);
-    if (!board) return null;
+
+    if (!board) {
+      return null;
+    }
+
     return board.toJSON() as BoardWithStickersResponse;
   }
 
@@ -42,18 +47,23 @@ export class BoardsService {
   async update(
     id: string,
     data: UpdateBoardDto,
+    userId?: string,
   ): Promise<BoardResponse | null> {
-    const board = await this.repo.update(id, data);
+    const board = await this.repo.update(id, data, userId);
     return board ? this.mapToResponse(board) : null;
   }
 
-  async delete(id: string): Promise<BoardResponse | null> {
-    const board = await this.repo.delete(id);
+  async delete(id: string, userId?: string): Promise<BoardResponse | null> {
+    const board = await this.repo.delete(id, userId);
     return board ? this.mapToResponse(board) : null;
   }
 
   async getHistory(boardId: string, page: number = 1, limit: number = 20) {
     return this.repo.getHistory(boardId, page, limit);
+  }
+
+  async createHistory(data: CreateHistoryDto[]) {
+    await this.repo.createHistory(data);
   }
 
   private mapToResponse(board: Board): BoardResponse {

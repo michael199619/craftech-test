@@ -1,3 +1,5 @@
+import { HistoryOperation } from './boards.model.js';
+
 export interface CreateBoardDto {
   name: string;
   workspaceId: string;
@@ -35,6 +37,16 @@ export interface BoardWithStickersResponse extends BoardResponse {
       height: number;
     };
   }[];
+}
+
+export interface CreateHistoryDto {
+  boardId: string;
+  authorId?: string; // undefined - system
+  operation: HistoryOperation;
+  entityId: string;
+  key?: string;
+  newValue?: string;
+  oldValue?: string;
 }
 
 export interface GetByIdDto {

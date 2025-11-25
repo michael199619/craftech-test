@@ -1,9 +1,16 @@
+import cookie from 'cookie-parser';
 import { Request, Response } from 'express';
 
 export interface Session {
   accessToken: string;
   refreshToken: string;
   userId: string;
+}
+
+export interface CookieSession {
+  access_token: string;
+  refresh_token: string;
+  user_id: string;
 }
 
 export function setSession(res: Response, session: Session) {
@@ -13,13 +20,15 @@ export function setSession(res: Response, session: Session) {
 }
 
 export function getSession(req: Request): Session | null {
-  const userId = req.cookies['user_id'];
+  const user = (req.cookies || cookie.JSONCookie(req.headers.cookie || '')) as
+    | CookieSession
+    | undefined;
 
-  return userId
+  return user?.user_id
     ? {
-        accessToken: req.cookies['access_token'],
-        refreshToken: req.cookies['refresh_token'],
-        userId,
+        accessToken: user.access_token,
+        refreshToken: user.refresh_token,
+        userId: user.user_id,
       }
     : null;
 }

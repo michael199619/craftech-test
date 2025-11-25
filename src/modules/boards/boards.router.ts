@@ -5,8 +5,8 @@ import { BoardsRepository } from './boards.repository.js';
 import { BoardsService } from './boards.service.js';
 
 const repo = new BoardsRepository();
-const service = new BoardsService(repo);
-const controller = new BoardsController(service, workspaceService);
+const boardService = new BoardsService(repo);
+const controller = new BoardsController(boardService, workspaceService);
 
 const router = Router();
 
@@ -18,3 +18,5 @@ router.put('/:id', controller.update);
 router.delete('/:id', controller.delete);
 
 export default router;
+
+export { boardService };

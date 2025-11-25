@@ -13,6 +13,8 @@ export interface UpdateStickerDto {
   positionX?: number;
   positionY?: number;
   index?: number;
+  width?: string;
+  height?: string;
 }
 
 export interface StickerResponse {
@@ -20,14 +22,11 @@ export interface StickerResponse {
   name: string;
   description: string;
   boardId: string;
-  stickerMetaId: string;
   createdAt?: Date;
-  updatedAt?: Date;
   meta?: StickerMetaResponse;
 }
 
 export interface StickerMetaResponse {
-  id: string;
   positionX: number;
   positionY: number;
   index: number;

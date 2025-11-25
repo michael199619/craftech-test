@@ -130,7 +130,7 @@ export class WorkspacesController {
         workspaceId: workspace.id,
         userId: req.user.id,
       });
-      res.status(201).json(workspace);
+      res.status(200).json(workspace);
     },
   );
 
