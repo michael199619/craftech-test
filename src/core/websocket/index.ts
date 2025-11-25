@@ -2,7 +2,7 @@ import { Server } from 'http';
 import { WebSocketServer } from 'ws';
 import { Req } from '../interfaces.js';
 import { logger } from '../logger.js';
-import { broadcastUserOnline } from './broadcast.js';
+import { broadcastToBoard } from './broadcast.js';
 import { authenticateConnection } from './connection.js';
 import { ClientEvents, ServerEvents } from './contants.js';
 import { handleMessage } from './handlers.js';
@@ -38,7 +38,10 @@ export function initWebSocket(server: Server) {
 
     addUserConnection(userBoard.userId, ws);
 
-    broadcastUserOnline(userBoard.userId, true, boardRooms);
+    broadcastToBoard(userBoard.userId, ClientEvents.USER_ONLINE, {
+      userId: userBoard.userId,
+      isOnline: true,
+    });
 
     ws.on(ServerEvents.MESSAGE, async (data: Buffer) => {
       try {
@@ -65,7 +68,10 @@ export function initWebSocket(server: Server) {
         const isOffline = removeUserConnection(ws.userId, ws);
 
         if (isOffline) {
-          broadcastUserOnline(ws.userId, false, boardRooms);
+          broadcastToBoard(ws.userId, ClientEvents.USER_ONLINE, {
+            userId: ws.userId,
+            isOnline: false,
+          });
         }
       }
 

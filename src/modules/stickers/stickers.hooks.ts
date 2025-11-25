@@ -62,6 +62,8 @@ Sticker.afterUpdate(async (sticker: Sticker, options) => {
       positionX: stickerMeta.positionX,
       positionY: stickerMeta.positionY,
       index: stickerMeta.index,
+      width: stickerMeta.width,
+      height: stickerMeta.height,
     },
   });
 
@@ -129,6 +131,8 @@ StickerMeta.afterUpdate(async (stickerMeta: StickerMeta, options) => {
       positionX: stickerMeta.positionX,
       positionY: stickerMeta.positionY,
       index: stickerMeta.index,
+      width: stickerMeta.width,
+      height: stickerMeta.height,
     },
   });
 

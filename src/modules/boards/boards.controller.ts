@@ -51,10 +51,7 @@ export class BoardsController {
   ) {}
 
   getAll = asyncHandler(
-    async (
-      req: Req<{}, {}, { page?: string; limit?: string }>,
-      res: Response,
-    ) => {
+    async (req: Req<{}, {}, PaginationParams>, res: Response) => {
       const { page, limit } = getPaginationParams(
         req.query.page,
         req.query.limit,
@@ -287,7 +284,7 @@ export class BoardsController {
    *                 data:
    *                   type: array
    *                   items:
-   *                     type: object
+   *                     $ref: '#/components/schemas/History'
    *                 pagination:
    *                   $ref: '#/components/schemas/Pagination'
    */
