@@ -1,5 +1,9 @@
 # Test for Craftech
 
+# Поведенческий анализ
+
+https://www.figma.com/design/iWocx5v3ByzXghWqUTdkn7/Untitled?node-id=0-1&t=l958mi7G6f37r6SQ-1
+
 # schema database
 
 ![Image alt](https://github.com/michael199619/craftech-test/raw/main/assets/database.svg)

@@ -1,6 +1,9 @@
 import { Express } from 'express';
 import path from 'path';
-import swaggerJsdoc from 'swagger-jsdoc';
+import {
+  default as swaggerJsdoc,
+  default as swaggerJSDoc,
+} from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { fileURLToPath } from 'url';
 import { appConfig } from './config.js';
@@ -10,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export function setupSwagger(app: Express) {
-  const options = {
+  const options: swaggerJSDoc.Options = {
     definition: {
       openapi: '3.0.1',
       info: {
@@ -146,11 +149,19 @@ export function setupSwagger(app: Express) {
     apis: [path.join(__dirname, '../modules/**/*.js')], // todo: исправить
   };
 
+  if (appConfig.prefixApi) {
+    options.definition!.servers = [
+      {
+        url: appConfig.prefixApi,
+      },
+    ];
+  }
+
   const spec = swaggerJsdoc(options);
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec));
 
   if (appConfig.nodeEnv === NodeEnv.DEV) {
-    app.get('/docs.json', (Request, res) => {
+    app.get('/docs.json', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(spec);
     });

@@ -1,5 +1,5 @@
 import cookieParser from 'cookie-parser';
-import express from 'express';
+import express, { Router } from 'express';
 import { errorHandler } from './core/error-handler.js';
 import { logger } from './core/logger.js';
 import { setupSwagger } from './core/swagger.js';
@@ -35,17 +35,20 @@ export async function bootstrap() {
 
   setupSwagger(app);
 
-  app.use('/auth', authRouter);
-  app.use('/workspaces', authGuard, workspacesRouter);
-  app.use('/users', authGuard, usersRouter);
-  app.use('/boards', authGuard, boardsRouter);
-  app.use('/stickers', authGuard, stickersRouter);
+  const api = Router();
+  api.use('/auth', authRouter);
+  api.use('/workspaces', authGuard, workspacesRouter);
+  api.use('/users', authGuard, usersRouter);
+  api.use('/boards', authGuard, boardsRouter);
+  api.use('/stickers', authGuard, stickersRouter);
+
+  app.use(appConfig.prefixApi, api);
 
   app.use(errorHandler);
 
   const server = app.listen(appConfig.port, () =>
     logger.info(
-      `Application started at http://localhost:${appConfig.port}/docs`,
+      `Application started at http://localhost:${appConfig.port}/${appConfig.prefixApi}/docs`,
     ),
   );
 

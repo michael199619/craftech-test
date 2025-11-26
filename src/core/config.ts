@@ -6,6 +6,8 @@ import { NodeEnv } from './enums.js';
 dotenv.config();
 
 export const appConfig = {
+  logLvl: env.get('LOG_LVL').default('debug').asString(),
+  prefixApi: env.get('PREFIX_API').default('/').asString(),
   port: env.get('PORT').default('3000').asPortNumber(),
   nodeEnv: env.get('NODE_ENV').default(NodeEnv.DEV).asString() as NodeEnv,
 };

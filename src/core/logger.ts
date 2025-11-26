@@ -1,4 +1,5 @@
 import winston from 'winston';
+import { appConfig } from './config.js';
 import { NodeEnv } from './enums.js';
 
 const { combine, timestamp, errors, json, printf, colorize } = winston.format;
@@ -14,7 +15,7 @@ const logFormat = printf(({ level, message, timestamp, ...meta }) => {
 });
 
 export const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
+  level: appConfig.logLvl,
   format: combine(
     errors({ stack: true }),
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -26,7 +27,7 @@ export const logger = winston.createLogger({
   ],
 });
 
-if (process.env.NODE_ENV !== NodeEnv.PROD) {
+if (appConfig.nodeEnv !== NodeEnv.PROD) {
   logger.add(
     new winston.transports.Console({
       format: combine(colorize(), timestamp(), logFormat),
