@@ -1,7 +1,7 @@
 import { broadcastToBoard } from '../../core/websocket/broadcast.js';
 import { ClientEvents } from '../../core/websocket/contants.js';
 import { CreateHistoryDto } from './boards.dto.js';
-import { Board, HistoryOperation } from './boards.model.js';
+import { Board, HistoryEntity, HistoryOperation } from './boards.model.js';
 import { boardService } from './boards.router.js';
 
 const ignoreFields: string[] = ['updatedAt', 'createdAt'];
@@ -13,8 +13,9 @@ Board.afterCreate(async (board: Board) => {
       authorId: board.authorId,
       operation: HistoryOperation.CREATE,
       entityId: board.id,
-      key: board.name,
+      key: 'name',
       newValue: board.name,
+      entityName: HistoryEntity.BOARD,
     },
   ]);
 });
@@ -45,6 +46,7 @@ Board.afterUpdate(async (board: Board, options) => {
       entityId: board.id,
       key: field,
       oldValue: oldValue,
+      entityName: HistoryEntity.BOARD,
       newValue: newValue,
     });
   }
@@ -59,6 +61,7 @@ Board.afterDestroy(async (board: Board, options) => {
       authorId: options.userId,
       operation: HistoryOperation.DELETE,
       entityId: board.id,
+      entityName: HistoryEntity.BOARD,
     },
   ]);
 

@@ -1,13 +1,13 @@
+import { Request } from 'express';
 import { UserResponse } from '../../modules/users/users.dto.js';
 import { getUserBySession } from '../auth/auth.guard.js';
 import { getSession } from '../cookies.js';
-import { Req } from '../interfaces.js';
 import { logger } from '../logger.js';
 import { UserBoard, WSClient } from './interfaces.js';
 
 export async function authenticateConnection(
   ws: WSClient,
-  req: Req,
+  req: Request,
 ): Promise<UserBoard | null> {
   try {
     const url = new URL(`${req.headers.host}${req.url}`);

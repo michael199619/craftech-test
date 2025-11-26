@@ -37,7 +37,7 @@ export async function getUserBySession({
 }
 
 export const authGuard = async (
-  req: Request & { user?: UserResponse },
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {

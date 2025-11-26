@@ -9,6 +9,12 @@ export enum HistoryOperation {
   DELETE = 'DELETE',
 }
 
+export enum HistoryEntity {
+  BOARD = 'BOARD',
+  STICKER = 'STICKER',
+  STICKER_META = 'STICKER_META',
+}
+
 export class UsersBoards extends Model {
   declare id: string;
   declare userId: string;
@@ -29,6 +35,7 @@ export class BoardHistory extends Model {
   declare boardId: string;
   declare operation: HistoryOperation;
   declare entityId?: string;
+  declare entityName: HistoryEntity;
   declare createdAt: Date;
   declare key?: string;
   declare oldValue?: string;
@@ -139,6 +146,10 @@ BoardHistory.init(
       allowNull: true,
     },
 
+    entityName: {
+      type: DataTypes.ENUM(...Object.values(HistoryEntity)),
+    },
+
     entityId: {
       type: DataTypes.UUID,
     },
@@ -163,7 +174,12 @@ BoardHistory.init(
       allowNull: true,
     },
   },
-  { sequelize, modelName: 'BoardHistory' },
+  {
+    sequelize,
+    modelName: 'BoardHistory',
+    tableName: 'BoardHistory',
+    updatedAt: false,
+  },
 );
 
 BoardHistory.belongsTo(User, { as: 'author', foreignKey: 'authorId' });

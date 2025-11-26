@@ -1,6 +1,5 @@
-import { Response } from 'express';
-import { asyncHandler, HandlerException } from '../../core/error-handler.js';
-import { Req } from '../../core/interfaces.js';
+import { Request, Response } from 'express';
+import { HandlerException } from '../../core/error-handler.js';
 import { logger } from '../../core/logger.js';
 import {
   getPaginationParams,
@@ -45,18 +44,19 @@ import { UsersService } from './users.service.js';
 export class UsersController {
   constructor(private service: UsersService) {}
 
-  getAll = asyncHandler(
-    async (req: Req<{}, {}, PaginationParams>, res: Response) => {
-      const { page, limit } = getPaginationParams(
-        req.query.page,
-        req.query.limit,
-      );
+  getAll = async (
+    req: Request<{}, {}, {}, PaginationParams>,
+    res: Response,
+  ) => {
+    const { page, limit } = getPaginationParams(
+      req.query.page,
+      req.query.limit,
+    );
 
-      const result = await this.service.getAll(page, limit);
+    const result = await this.service.getAll(page, limit);
 
-      res.json(result);
-    },
-  );
+    res.json(result);
+  };
 
   /**
    * @openapi
@@ -80,7 +80,7 @@ export class UsersController {
    *             schema:
    *               $ref: '#/components/schemas/UserResponse'
    */
-  getById = asyncHandler(async (req: Req<{ id: string }>, res: Response) => {
+  getById = async (req: Request<{ id: string }>, res: Response) => {
     const { id } = req.params;
 
     const user = await this.service.getById(id, false);
@@ -89,7 +89,7 @@ export class UsersController {
     }
 
     res.json(user);
-  });
+  };
 
   /**
    * @openapi
@@ -128,27 +128,28 @@ export class UsersController {
    *             schema:
    *               $ref: '#/components/schemas/UserResponse'
    */
-  update = asyncHandler(
-    async (req: Req<{ id: string }, UpsertUserDto>, res: Response) => {
-      const { id } = req.params;
-      const body = req.body;
+  update = async (
+    req: Request<{ id: string }, {}, UpsertUserDto>,
+    res: Response,
+  ) => {
+    const { id } = req.params;
+    const body = req.body;
 
-      const user = await this.service.getById(id, false);
+    const user = await this.service.getById(id, false);
 
-      if (!user) {
-        throw new HandlerException(404, 'Пользователь не найден');
-      }
+    if (!user) {
+      throw new HandlerException(404, 'Пользователь не найден');
+    }
 
-      if (body.login && (await this.service.findByLogin(body.login, id))) {
-        throw new HandlerException(400, 'Логин должен быть уникальным');
-      }
+    if (body.login && (await this.service.findByLogin(body.login, id))) {
+      throw new HandlerException(400, 'Логин должен быть уникальным');
+    }
 
-      await this.service.upsert({ ...body, id });
+    await this.service.upsert({ ...body, id });
 
-      logger.info('User updated', { userId: id });
-      res.json(user);
-    },
-  );
+    logger.info('User updated', { userId: id });
+    res.json(user);
+  };
 
   /**
    * @openapi
@@ -165,7 +166,7 @@ export class UsersController {
    *           type: string
    *           format: uuid
    */
-  delete = asyncHandler(async (req: Req<{ id: string }>, res: Response) => {
+  delete = async (req: Request<{ id: string }>, res: Response) => {
     const { id } = req.params;
 
     const user = await this.service.getById(id, false);
@@ -178,5 +179,5 @@ export class UsersController {
 
     logger.info('User deleted', { userId: id });
     res.status(200).json({ message: 'Пользователь удален' });
-  });
+  };
 }

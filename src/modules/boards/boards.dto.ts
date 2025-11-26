@@ -1,4 +1,4 @@
-import { HistoryOperation } from './boards.model.js';
+import { HistoryEntity, HistoryOperation } from './boards.model.js';
 
 export interface CreateBoardDto {
   name: string;
@@ -44,6 +44,7 @@ export interface CreateHistoryDto {
   authorId?: string; // undefined - system
   operation: HistoryOperation;
   entityId: string;
+  entityName: HistoryEntity;
   key?: string;
   newValue?: string;
   oldValue?: string;

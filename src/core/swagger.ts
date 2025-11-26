@@ -150,7 +150,7 @@ export function setupSwagger(app: Express) {
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec));
 
   if (appConfig.nodeEnv === NodeEnv.DEV) {
-    app.get('/docs.json', (req, res) => {
+    app.get('/docs.json', (Request, res) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(spec);
     });

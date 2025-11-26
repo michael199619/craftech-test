@@ -1,6 +1,6 @@
+import { Request } from 'express';
 import { Server } from 'http';
 import { WebSocketServer } from 'ws';
-import { Req } from '../interfaces.js';
 import { logger } from '../logger.js';
 import { broadcastToBoard } from './broadcast.js';
 import { authenticateConnection } from './connection.js';
@@ -19,11 +19,10 @@ let wss: WebSocketServer;
 export function initWebSocket(server: Server) {
   wss = new WebSocketServer({ server });
 
-  wss.on(ServerEvents.CONNECTION, async (ws: WSClient, req: Req) => {
+  wss.on(ServerEvents.CONNECTION, async (ws: WSClient, req: Request) => {
     ws.isAlive = true;
 
     const userBoard = await authenticateConnection(ws, req);
-    console.log(9);
 
     if (!userBoard) {
       return;

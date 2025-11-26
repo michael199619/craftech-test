@@ -1,9 +1,8 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { getUserBySession } from '../../core/auth/auth.guard.js';
 import authService from '../../core/auth/auth.service.js';
 import { clearSession, getSession, setSession } from '../../core/cookies.js';
-import { HandlerException, asyncHandler } from '../../core/error-handler.js';
-import { Req } from '../../core/interfaces.js';
+import { HandlerException } from '../../core/error-handler.js';
 import { logger } from '../../core/logger.js';
 import { UserStatus } from '../users/users.model.js';
 import { UsersService } from '../users/users.service.js';
@@ -45,7 +44,7 @@ import { AuthResponse, LoginDto, SignupDto } from './auth.dto.js';
 export class AuthController {
   constructor(private usersService: UsersService) {}
 
-  signup = asyncHandler(async (req: Req<{}, SignupDto>, res: Response) => {
+  signup = async (req: Request<{}, {}, SignupDto>, res: Response) => {
     const { name, login, password } = req.body;
     const session = getSession(req);
     let user;
@@ -94,7 +93,7 @@ export class AuthController {
       login: userAuthored.login,
     });
     res.status(200).json(response);
-  });
+  };
 
   /**
    * @openapi
@@ -125,7 +124,7 @@ export class AuthController {
    *             schema:
    *               $ref: '#/components/schemas/AuthResponse'
    */
-  login = asyncHandler(async (req: Req<{}, LoginDto>, res: Response) => {
+  login = async (req: Request<{}, {}, LoginDto>, res: Response) => {
     const { login, password } = req.body;
 
     const user = await this.usersService.findByLogin(login);
@@ -152,7 +151,7 @@ export class AuthController {
       logger.warn('Login failed', { login, error: (error as Error).message });
       throw new HandlerException(401, 'Неверные учетные данные');
     }
-  });
+  };
 
   /**
    * @openapi
@@ -170,7 +169,7 @@ export class AuthController {
    *             schema:
    *               $ref: '#/components/schemas/AuthResponse'
    */
-  refreshToken = asyncHandler(async (req: Req, res: Response) => {
+  refreshToken = async (req: Request, res: Response) => {
     const session = getSession(req);
 
     if (!session) {
@@ -201,7 +200,7 @@ export class AuthController {
       logger.warn('Token refresh failed', error);
       throw new HandlerException(401, 'Неверный refresh токен');
     }
-  });
+  };
 
   /**
    * @openapi
@@ -217,7 +216,7 @@ export class AuthController {
    *             schema:
    *               $ref: '#/components/schemas/UserResponse'
    */
-  getMe = asyncHandler(async (req: Req, res: Response) => {
+  getMe = async (req: Request, res: Response) => {
     res.json(req.user);
-  });
+  };
 }

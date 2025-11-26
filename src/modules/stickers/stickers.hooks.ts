@@ -1,7 +1,7 @@
 import { broadcastToBoard } from '../../core/websocket/broadcast.js';
 import { ClientEvents } from '../../core/websocket/contants.js';
 import { CreateHistoryDto } from '../boards/boards.dto.js';
-import { HistoryOperation } from '../boards/boards.model.js';
+import { HistoryEntity, HistoryOperation } from '../boards/boards.model.js';
 import { boardService } from '../boards/boards.router.js';
 import { Sticker, StickerMeta } from './stickers.model.js';
 
@@ -30,6 +30,7 @@ Sticker.afterCreate(async (sticker: Sticker, options) => {
       boardId: sticker.boardId,
       authorId: options.userId,
       operation: HistoryOperation.CREATE,
+      entityName: HistoryEntity.STICKER,
       entityId: sticker.id,
       key: sticker.name,
       newValue: sticker.name,
@@ -76,6 +77,7 @@ Sticker.afterUpdate(async (sticker: Sticker, options) => {
       boardId: sticker.boardId,
       authorId: options.userId,
       operation: HistoryOperation.UPDATE,
+      entityName: HistoryEntity.STICKER,
       entityId: sticker.id,
       key: field,
       newValue,
@@ -97,6 +99,7 @@ Sticker.afterDestroy(async (sticker: Sticker, options) => {
       boardId: sticker.boardId,
       authorId: options.userId,
       operation: HistoryOperation.DELETE,
+      entityName: HistoryEntity.STICKER,
       entityId: sticker.id,
       key: sticker.name,
       newValue: sticker.name,
@@ -146,6 +149,7 @@ StickerMeta.afterUpdate(async (stickerMeta: StickerMeta, options) => {
       authorId: options.userId,
       operation: HistoryOperation.UPDATE,
       entityId: stickerMeta.id,
+      entityName: HistoryEntity.STICKER_META,
       key: field,
       newValue,
       oldValue,

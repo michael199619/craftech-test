@@ -5,6 +5,7 @@ const database: Options = {
   ...postgresConfig,
   dialect: 'postgres',
   logging: false,
+  sync: { alter: true, force: true },
 };
 
 export default database;

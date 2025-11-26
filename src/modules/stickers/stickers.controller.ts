@@ -1,6 +1,5 @@
-import { Response } from 'express';
-import { HandlerException, asyncHandler } from '../../core/error-handler.js';
-import { Req } from '../../core/interfaces.js';
+import { Request, Response } from 'express';
+import { HandlerException } from '../../core/error-handler.js';
 import { logger } from '../../core/logger.js';
 import {
   CreateStickerDto,
@@ -61,7 +60,7 @@ import { StickersService } from './stickers.service.js';
 export class StickersController {
   constructor(private service: StickersService) {}
 
-  getAll = asyncHandler(async (req: Req<{}, {}, GetByIdDto>, res: Response) => {
+  getAll = async (req: Request<{}, {}, {}, GetByIdDto>, res: Response) => {
     const { width, height, boardId } = req.query;
 
     const widthNum = Number(width);
@@ -73,7 +72,7 @@ export class StickersController {
       boardId,
     });
     res.json(result);
-  });
+  };
 
   /**
    * @openapi
@@ -117,14 +116,16 @@ export class StickersController {
    *             schema:
    *               $ref: '#/components/schemas/StickerResponse'
    */
-  create = asyncHandler(
-    async (req: Req<{}, CreateStickerDto>, res: Response) => {
-      const sticker = await this.service.create(req.body, req.user.id);
+  create = async (req: Request<{}, {}, CreateStickerDto>, res: Response) => {
+    if (!req.user) {
+      throw new HandlerException(403, 'Отказано в доступе');
+    }
 
-      logger.info('Sticker created', { stickerId: sticker.id });
-      res.status(200).json(sticker);
-    },
-  );
+    const sticker = await this.service.create(req.body, req.user.id);
+
+    logger.info('Sticker created', { stickerId: sticker.id });
+    res.status(200).json(sticker);
+  };
 
   /**
    * @openapi
@@ -165,19 +166,24 @@ export class StickersController {
    *             schema:
    *               $ref: '#/components/schemas/StickerResponse'
    */
-  update = asyncHandler(
-    async (req: Req<{ id: string }, UpdateStickerDto>, res: Response) => {
-      const { id } = req.params;
+  update = async (
+    req: Request<{ id: string }, {}, UpdateStickerDto>,
+    res: Response,
+  ) => {
+    const { id } = req.params;
 
-      const sticker = await this.service.update(id, req.body, req.user.id);
-      if (!sticker) {
-        throw new HandlerException(404, 'Стикер не найден');
-      }
+    if (!req.user) {
+      throw new HandlerException(403, 'Отказано в доступе');
+    }
 
-      logger.info('Sticker updated', { stickerId: id });
-      res.json(sticker);
-    },
-  );
+    const sticker = await this.service.update(id, req.body, req.user.id);
+    if (!sticker) {
+      throw new HandlerException(404, 'Стикер не найден');
+    }
+
+    logger.info('Sticker updated', { stickerId: id });
+    res.json(sticker);
+  };
 
   /**
    * @openapi
@@ -194,8 +200,12 @@ export class StickersController {
    *           type: string
    *           format: uuid
    */
-  delete = asyncHandler(async (req: Req<{ id: string }>, res: Response) => {
+  delete = async (req: Request<{ id: string }>, res: Response) => {
     const { id } = req.params;
+
+    if (!req.user) {
+      throw new HandlerException(403, 'Отказано в доступе');
+    }
 
     const sticker = await this.service.delete(id, req.user.id);
     if (!sticker) {
@@ -204,5 +214,5 @@ export class StickersController {
 
     logger.info('Sticker deleted', { stickerId: id });
     res.status(200).send();
-  });
+  };
 }
