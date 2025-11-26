@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
+RUN npm run build
 RUN rm -r src
 
 COPY . .
