@@ -158,6 +158,8 @@ export class AuthController {
    * /auth/signout:
    *   post:
    *     summary: Выход
+   *     tags:
+   *       - Auth
    *     description: проверятся сессия в куках
    */
   signout = async (req: Request, res: Response) => {
@@ -177,6 +179,8 @@ export class AuthController {
     }
 
     clearSession(res);
+
+    res.status(200).send();
   };
 
   /**

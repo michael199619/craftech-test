@@ -10,8 +10,8 @@ export interface UpsertUserDto {
   id?: string;
   name?: string;
   login?: string;
-  password: string;
-  status: UserStatus;
+  password?: string;
+  status?: UserStatus;
 }
 
 export interface UserResponseWithPassword extends UserResponse {

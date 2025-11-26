@@ -32,10 +32,15 @@ export class UsersService {
   }
 
   async upsert(data: UpsertUserDto): Promise<UserResponseWithPassword> {
-    return await this.repo.upsert({
+    const dto: UpsertUserDto = {
       ...data,
-      password: await authService.getBcryptHashPassword(data.password),
-    });
+    };
+
+    if (data.password) {
+      dto.password = await authService.getBcryptHashPassword(data.password);
+    }
+
+    return await this.repo.upsert(dto);
   }
 
   async delete(id: string): Promise<void> {

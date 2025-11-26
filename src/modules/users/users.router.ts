@@ -4,8 +4,8 @@ import { UsersRepository } from './users.repository.js';
 import { UsersService } from './users.service.js';
 
 const repo = new UsersRepository();
-const service = new UsersService(repo);
-const controller = new UsersController(service);
+const usersService = new UsersService(repo);
+const controller = new UsersController(usersService);
 
 const router = Router();
 
@@ -15,3 +15,5 @@ router.put('/:id', controller.update);
 router.delete('/:id', controller.delete);
 
 export default router;
+
+export { usersService };

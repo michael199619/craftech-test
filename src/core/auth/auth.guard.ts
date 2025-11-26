@@ -3,16 +3,12 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserResponse } from '../../modules/users/users.dto.js';
 import { UserStatus } from '../../modules/users/users.model.js';
-import { UsersRepository } from '../../modules/users/users.repository.js';
-import { UsersService } from '../../modules/users/users.service.js';
+import { usersService } from '../../modules/users/users.router.js';
 import { jwtConfig } from '../config.js';
 import { getSession, Session, setSession } from '../cookies.js';
 import { logger } from '../logger.js';
 import { TokenType } from './auth.interface.js';
 import authService from './auth.service.js';
-
-const usersRepo = new UsersRepository();
-const usersService = new UsersService(usersRepo);
 
 export async function getUserBySession({
   accessToken,
@@ -60,7 +56,7 @@ export const authGuard = async (
       const hashedPassword =
         await authService.getBcryptHashPassword(randomPassword);
 
-      const anonymousUser = await usersRepo.upsert({
+      const anonymousUser = await usersService.upsert({
         name: '',
         login: '',
         password: hashedPassword,
@@ -83,6 +79,11 @@ export const authGuard = async (
 
       logger.info('Anonymous user created', {
         userId: anonymousUser.id,
+      });
+    } else {
+      usersService.upsert({
+        ...user,
+        status: UserStatus.AUTHORIZED,
       });
     }
 

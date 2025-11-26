@@ -60,16 +60,24 @@ export class UsersRepository {
 
   async upsert({ id, ...data }: UpsertUserDto) {
     let userId: string | undefined = id;
+    const loginedAt = new Date();
 
     if (userId) {
-      await User.update(data, {
-        where: { id: userId },
-      });
+      await User.update(
+        {
+          ...data,
+          loginedAt,
+        },
+        {
+          where: { id: userId },
+        },
+      );
     } else {
       const user = await User.create({
         ...data,
-        loginedAt: new Date(),
+        loginedAt,
       });
+
       userId = user.id;
     }
 
