@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import { SequelizeStorage, Umzug } from 'umzug';
+import logger from '../logger.js';
 import sequelize from './database.js';
 
 export const umzug = new Umzug({
@@ -11,16 +12,16 @@ export const umzug = new Umzug({
         name,
         up: async () => {
           const migration = (await import(filePath!)).default;
-          migration.up(context, Sequelize);
+          await migration.up(context, Sequelize);
         },
         down: async () => {
           const migration = (await import(filePath!)).default;
-          migration.down(context, Sequelize);
+          await migration.down(context, Sequelize);
         },
       };
     },
   },
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize }),
-  logger: console,
+  logger: logger,
 });

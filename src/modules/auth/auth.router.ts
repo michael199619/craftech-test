@@ -11,6 +11,7 @@ const authController = new AuthController(usersService);
 const router = Router();
 
 router.post('/signup', authController.signup);
+router.post('/signout', authController.signout);
 router.post('/login', authController.login);
 router.post('/refresh-token', authController.refreshToken);
 router.get('/me', authGuard, authController.getMe);

@@ -29,8 +29,6 @@ export function setupSwagger(app: Express) {
               name: { type: 'string' },
               login: { type: 'string' },
               status: { type: 'string' },
-              createdAt: { type: 'string', format: 'date-time' },
-              updatedAt: { type: 'string', format: 'date-time' },
             },
           },
           BoardResponse: {
@@ -41,8 +39,6 @@ export function setupSwagger(app: Express) {
               authorId: { type: 'string', format: 'uuid' },
               workspaceId: { type: 'string', format: 'uuid' },
               private: { type: 'boolean' },
-              createdAt: { type: 'string', format: 'date-time' },
-              updatedAt: { type: 'string', format: 'date-time' },
             },
           },
           BoardWithStickersResponse: {
@@ -86,8 +82,6 @@ export function setupSwagger(app: Express) {
               description: { type: 'string' },
               boardId: { type: 'string', format: 'uuid' },
               stickerMetaId: { type: 'string', format: 'uuid' },
-              createdAt: { type: 'string', format: 'date-time' },
-              updatedAt: { type: 'string', format: 'date-time' },
               meta: {
                 type: 'object',
                 properties: {
@@ -107,8 +101,6 @@ export function setupSwagger(app: Express) {
               id: { type: 'string', format: 'uuid' },
               name: { type: 'string' },
               authorId: { type: 'string', format: 'uuid' },
-              createdAt: { type: 'string', format: 'date-time' },
-              updatedAt: { type: 'string', format: 'date-time' },
             },
           },
           AuthResponse: {

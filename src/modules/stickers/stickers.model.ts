@@ -51,7 +51,13 @@ StickerMeta.init(
       allowNull: false,
     },
   },
-  { sequelize, modelName: 'StickerMeta' },
+  {
+    sequelize,
+    modelName: 'StickerMeta',
+    tableName: 'StickerMeta',
+    createdAt: false,
+    updatedAt: false,
+  },
 );
 
 Sticker.init(
@@ -87,7 +93,13 @@ Sticker.init(
       allowNull: false,
     },
   },
-  { sequelize, modelName: 'Sticker', tableName: 'Sticker' },
+  {
+    sequelize,
+    modelName: 'Sticker',
+    tableName: 'Sticker',
+    createdAt: false,
+    updatedAt: false,
+  },
 );
 
 Sticker.belongsTo(Board, { foreignKey: 'boardId' });

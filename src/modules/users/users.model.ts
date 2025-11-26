@@ -12,7 +12,6 @@ export class User extends Model {
   declare login: string;
   declare password: string;
   declare status: UserStatus;
-  declare registrationCode: string | null;
 }
 
 User.init(
@@ -41,14 +40,15 @@ User.init(
       allowNull: false,
     },
 
-    registrationCode: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-
     loginedAt: {
       type: DataTypes.DATE,
     },
   },
-  { sequelize, modelName: 'User' },
+  {
+    sequelize,
+    modelName: 'User',
+    tableName: 'User',
+    createdAt: false,
+    updatedAt: false,
+  }, // добавить метки
 );

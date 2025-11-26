@@ -46,11 +46,12 @@ export async function bootstrap() {
 
   app.use(errorHandler);
 
-  const server = app.listen(appConfig.port, () =>
+  const server = app.listen(appConfig.port, () => {
+    const prefix = appConfig.prefixApi ? `${appConfig.prefixApi}/` : '';
     logger.info(
-      `Application started at http://localhost:${appConfig.port}/${appConfig.prefixApi}/docs`,
-    ),
-  );
+      `Application started at http://localhost:${appConfig.port}${prefix}/docs`,
+    );
+  });
 
   initWebSocket(server);
 }

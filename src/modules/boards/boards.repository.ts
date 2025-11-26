@@ -33,15 +33,7 @@ export class BoardsRepository {
     );
 
     const { count, rows } = await Board.findAndCountAll({
-      attributes: [
-        'id',
-        'name',
-        'authorId',
-        'private',
-        'createdAt',
-        'updatedAt',
-        'workspaceId',
-      ],
+      attributes: ['id', 'name', 'authorId', 'private', 'workspaceId'],
 
       where: {
         [Op.and]: [
@@ -57,7 +49,7 @@ export class BoardsRepository {
       distinct: true,
       limit,
       offset,
-      order: [['createdAt', 'DESC']],
+      //order: [['createdAt', 'DESC']], todo: добавить
     });
 
     return {
@@ -137,7 +129,7 @@ export class BoardsRepository {
       return null;
     }
 
-    await Board.destroy({ where: { id }, individualHooks: true });
+    await Board.destroy({ where: { id }, individualHooks: true, userId });
     return board;
   }
 

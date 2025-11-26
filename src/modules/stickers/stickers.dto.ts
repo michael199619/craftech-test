@@ -5,6 +5,8 @@ export interface CreateStickerDto {
   positionX?: number;
   positionY?: number;
   index?: number;
+  width?: string;
+  height?: number;
 }
 
 export interface UpdateStickerDto {

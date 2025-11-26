@@ -74,7 +74,12 @@ Workspace.init(
       allowNull: false,
     },
   },
-  { sequelize, modelName: 'Workspace' },
+  {
+    sequelize,
+    modelName: 'Workspace',
+    tableName: 'Workspace',
+    updatedAt: false,
+  },
 );
 
 Workspace.belongsTo(User, { foreignKey: 'authorId', as: 'author' });

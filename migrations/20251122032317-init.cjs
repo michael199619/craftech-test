@@ -33,26 +33,27 @@ module.exports = {
       id: { type: DataTypes.UUID, primaryKey: true, allowNull: false },
       positionX: {
         type: DataTypes.FLOAT,
-        comment: 'Это нужно для отображения стикера, фронт сам задаем позицию'
+        comment: 'Это нужно для отображения стикера, фронт сам задаем позицию',
       },
       positionY: {
         type: DataTypes.FLOAT,
-        comment: 'Это нужно для отображения стикера, фронт сам задаем позицию'
+        comment: 'Это нужно для отображения стикера, фронт сам задаем позицию',
       },
       index: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        comment: 'номер слоя, чтоб стикер можно было бы переместить над другим стикером или под него'
+        comment:
+          'номер слоя, чтоб стикер можно было бы переместить над другим стикером или под него',
       },
       width: {
         type: DataTypes.FLOAT,
         allowNull: false,
-        comment: 'Это нужно для отображения стикера, фронт сам задаем размер'
+        comment: 'Это нужно для отображения стикера, фронт сам задаем размер',
       },
       height: {
         type: DataTypes.FLOAT,
         allowNull: false,
-        comment: 'Это нужно для отображения стикера, фронт сам задаем размер'
+        comment: 'Это нужно для отображения стикера, фронт сам задаем размер',
       },
     });
 

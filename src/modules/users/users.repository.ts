@@ -11,10 +11,10 @@ export class UsersRepository {
     const offset = (page - 1) * limit;
 
     const { count, rows } = await User.findAndCountAll({
-      attributes: ['name', 'login', 'status', 'loginedAt'],
+      attributes: ['id', 'name', 'login', 'status', 'loginedAt'],
       limit,
       offset,
-      order: [['createdAt', 'DESC']],
+      //  order: [['createdAt','DESC']],
     });
 
     return {
@@ -29,10 +29,15 @@ export class UsersRepository {
   }
 
   async findById(id: string, selectPassword: boolean = true) {
+    const include: string[] = ['id', 'name', 'login'];
+
+    if (selectPassword) {
+      include.push('password');
+    }
+
     return User.findByPk(id, {
       attributes: {
-        include: ['id', 'name', 'login'],
-        exclude: selectPassword ? ['password'] : [],
+        include,
       },
     });
   }
@@ -53,10 +58,6 @@ export class UsersRepository {
     });
   }
 
-  async findByRegistrationCode(registrationCode: string) {
-    return User.findOne({ where: { registrationCode } });
-  }
-
   async upsert({ id, ...data }: UpsertUserDto) {
     let userId: string | undefined = id;
 
@@ -65,11 +66,14 @@ export class UsersRepository {
         where: { id: userId },
       });
     } else {
-      const user = await User.create(data);
+      const user = await User.create({
+        ...data,
+        loginedAt: new Date(),
+      });
       userId = user.id;
     }
 
-    const user = await this.findById(userId);
+    const user = await this.findById(userId, true);
 
     return user!;
   }

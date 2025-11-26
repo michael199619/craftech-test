@@ -52,7 +52,7 @@ export class AuthController {
     if (session) {
       try {
         user = await getUserBySession(session);
-
+        console.log(user);
         if (user?.status === UserStatus.AUTHORIZED) {
           throw new HandlerException(401, 'Пользователь уже авторизован');
         }
@@ -151,6 +151,32 @@ export class AuthController {
       logger.warn('Login failed', { login, error: (error as Error).message });
       throw new HandlerException(401, 'Неверные учетные данные');
     }
+  };
+
+  /**
+   * @openapi
+   * /auth/signout:
+   *   post:
+   *     summary: Выход
+   *     description: проверятся сессия в куках
+   */
+  signout = async (req: Request, res: Response) => {
+    const session = getSession(req);
+    let user;
+
+    if (session) {
+      try {
+        user = await getUserBySession(session);
+
+        if (user) {
+          authService.logout(user?.id, session.refreshToken);
+        }
+      } catch (e) {
+        logger.debug('Session is invalid', e);
+      }
+    }
+
+    clearSession(res);
   };
 
   /**

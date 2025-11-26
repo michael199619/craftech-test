@@ -33,12 +33,14 @@ export class StickersRepository {
   }
 
   async create(data: CreateStickerDto, userId?: string) {
-    const { positionX, positionY, index, ...stickerData } = data;
+    const { positionX, positionY, width, height, index, ...stickerData } = data;
 
     const stickerMeta = await StickerMeta.create(
       {
         positionX,
         positionY,
+        width,
+        height,
         index,
       },
       { userId, individualHooks: true },

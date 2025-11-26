@@ -13,7 +13,7 @@ export class WorkspacesRepository {
     const { count, rows } = await Workspace.findAndCountAll({
       limit,
       offset,
-      order: [['createdAt', 'DESC']],
+      //  order: [['createdAt', 'DESC']],
     });
 
     return {

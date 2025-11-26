@@ -70,7 +70,13 @@ Board.init(
       allowNull: true,
     },
   },
-  { sequelize, modelName: 'Board' },
+  {
+    sequelize,
+    modelName: 'Board',
+    tableName: 'Board',
+    createdAt: false,
+    updatedAt: false,
+  },
 );
 
 Board.belongsTo(User, { as: 'author', foreignKey: 'authorId' });

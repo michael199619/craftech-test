@@ -105,6 +105,12 @@ export class StickersController {
    *               positionY:
    *                 type: number
    *                 default: 0
+   *               width:
+   *                 type: number
+   *                 default: 200
+   *               height:
+   *                 type: number
+   *                 default: 200
    *               index:
    *                 type: number
    *                 default: 0
