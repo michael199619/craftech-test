@@ -145,6 +145,8 @@ export class AuthController {
         userId: user.id,
       };
 
+      setSession(res, response);
+
       logger.info('User logged in', { userId: user.id, login: user.login });
       res.json(response);
     } catch (error) {
