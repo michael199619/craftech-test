@@ -36,10 +36,11 @@ export interface StickerMetaResponse {
   height?: number;
 }
 
-export interface GetByIdDto {
+export interface GetAllDto {
   width: number;
   height: number;
   boardId: string;
+  exludes?: string[];
 }
 
 export interface StickerMetaDto {

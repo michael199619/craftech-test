@@ -1,6 +1,6 @@
 import {
   CreateStickerDto,
-  GetByIdDto,
+  GetAllDto,
   StickerMetaDto,
   StickerResponse,
   UpdateStickerDto,
@@ -11,7 +11,7 @@ import { StickersRepository } from './stickers.repository.js';
 export class StickersService {
   constructor(private repo: StickersRepository) {}
 
-  async getAll(dto: GetByIdDto) {
+  async getAll(dto: GetAllDto) {
     return await this.repo.findAll(dto);
   }
 

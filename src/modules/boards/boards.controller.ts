@@ -105,10 +105,12 @@ export class BoardsController {
     res: Response,
   ) => {
     const { id } = req.params;
-    const width = Number(req.query.width);
-    const height = Number(req.query.height);
+    const { width, height } = req.query;
 
-    const board = await this.service.getById(id, { width, height });
+    const board = await this.service.getById(id, {
+      width: +width,
+      height: +height,
+    });
 
     if (!board) {
       throw new HandlerException(404, 'Доска не найдена');

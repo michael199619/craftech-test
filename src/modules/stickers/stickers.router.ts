@@ -1,11 +1,12 @@
 import { Router } from 'express';
+import { boardService } from '../boards/boards.router.js';
 import { StickersController } from './stickers.controller.js';
 import { StickersRepository } from './stickers.repository.js';
 import { StickersService } from './stickers.service.js';
 
 const repo = new StickersRepository();
 const stickerService = new StickersService(repo);
-const controller = new StickersController(stickerService);
+const controller = new StickersController(stickerService, boardService);
 
 const router = Router();
 

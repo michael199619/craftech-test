@@ -1,21 +1,27 @@
 import {
   CreateStickerDto,
+  GetAllDto,
   StickerMetaDto,
   UpdateStickerDto,
 } from './stickers.dto.js';
 import { Sticker, StickerMeta } from './stickers.model.js';
 
 import { Op } from 'sequelize';
-import { GetByIdDto } from '../boards/boards.dto.js';
 
 export class StickersRepository {
-  findAll({ width, height }: GetByIdDto): Promise<Sticker[]> {
+  findAll({ width, height, boardId, exludes }: GetAllDto): Promise<Sticker[]> {
     return Sticker.findAll({
       attributes: ['id', 'name', 'description'],
+      where: {
+        boardId,
+        id: {
+          [Op.notIn]: exludes || [],
+        },
+      },
       include: [
         {
           association: 'meta',
-          attributes: ['positionX', 'positionY', 'width', 'height'],
+          attributes: ['positionX', 'positionY', 'width', 'height', 'index'],
           required: true,
           where: {
             positionX: { [Op.lte]: width },
@@ -85,6 +91,7 @@ export class StickersRepository {
 
   async delete(id: string, userId?: string) {
     const sticker = await this.findById(id);
+
     if (!sticker) {
       return null;
     }

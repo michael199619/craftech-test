@@ -84,6 +84,7 @@ export class UsersController {
     const { id } = req.params;
 
     const user = await this.service.getById(id, false);
+
     if (!user) {
       throw new HandlerException(404, 'Пользователь не найден');
     }
