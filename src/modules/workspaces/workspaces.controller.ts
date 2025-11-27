@@ -84,6 +84,7 @@ export class WorkspacesController {
     const { id } = req.params;
 
     const workspace = await this.service.getById(id);
+
     if (!workspace) {
       throw new HandlerException(404, 'Воркспейс не найден');
     }
@@ -174,10 +175,11 @@ export class WorkspacesController {
   ) => {
     const { id } = req.params;
 
-    const workspace = await this.service.update(id, req.body);
-    if (!workspace) {
+    if (!(await this.service.getById(id))) {
       throw new HandlerException(404, 'Воркспейс не найден');
     }
+
+    const workspace = await this.service.update(id, req.body);
 
     logger.info('Workspace updated', { workspaceId: id });
     res.json(workspace);
@@ -208,10 +210,11 @@ export class WorkspacesController {
   delete = async (req: Request<{ id: string }>, res: Response) => {
     const { id } = req.params;
 
-    const workspace = await this.service.delete(id);
-    if (!workspace) {
+    if (!(await this.service.getById(id))) {
       throw new HandlerException(404, 'Воркспейс не найден');
     }
+
+    const workspace = await this.service.delete(id);
 
     logger.info('Workspace deleted', { workspaceId: id });
     res.json(workspace);
