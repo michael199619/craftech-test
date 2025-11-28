@@ -3,16 +3,21 @@ import {
   BoardWithStickersResponse,
   CreateBoardDto,
   CreateHistoryDto,
+  GetAllResponse,
   GetByIdDto,
   UpdateBoardDto,
 } from './boards.dto.js';
-import { Board } from './boards.model.js';
+import { Board, BoardHistory } from './boards.model.js';
 import { BoardsRepository } from './boards.repository.js';
 
 export class BoardsService {
   constructor(private repo: BoardsRepository) {}
 
-  async getAll(userId: string, page: number = 1, limit: number = 20) {
+  async getAll(
+    userId: string,
+    page: number = 1,
+    limit: number = 20,
+  ): Promise<GetAllResponse> {
     const result = await this.repo.findAll(userId, page, limit);
 
     return {
@@ -31,16 +36,15 @@ export class BoardsService {
       return null;
     }
 
-    return board.toJSON() as BoardWithStickersResponse;
+    return board.toJSON();
   }
 
-  async create(
-    data: CreateBoardDto & { authorId?: string },
-  ): Promise<BoardResponse> {
+  async create(data: CreateBoardDto): Promise<BoardResponse> {
     const board = await this.repo.create({
       ...data,
       private: !!data.private,
     });
+
     return this.mapToResponse(board);
   }
 
@@ -53,20 +57,24 @@ export class BoardsService {
     return board ? this.mapToResponse(board) : null;
   }
 
-  async delete(id: string, userId?: string): Promise<BoardResponse | null> {
-    const board = await this.repo.delete(id, userId);
-    return board ? this.mapToResponse(board) : null;
+  async delete(id: string, userId?: string) {
+    await this.repo.delete(id, userId);
   }
 
   async getHistory(boardId: string, page: number = 1, limit: number = 20) {
-    return this.repo.getHistory(boardId, page, limit);
+    const result = await this.repo.getHistory(boardId, page, limit);
+
+    return {
+      data: result.data.map(this.mapToResponse),
+      pagination: result.pagination,
+    };
   }
 
   async createHistory(data: CreateHistoryDto[]) {
     await this.repo.createHistory(data);
   }
 
-  private mapToResponse(board: Board): BoardResponse {
-    return board.toJSON() as BoardResponse;
+  private mapToResponse<T extends Board | BoardHistory>(board: T): T {
+    return board.toJSON();
   }
 }

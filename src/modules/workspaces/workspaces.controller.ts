@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { HandlerException } from '../../core/error-handler.js';
 import { logger } from '../../core/logger.js';
+import { paths } from '../../core/types/api-types.js';
 import {
-  getPaginationParams,
-  PaginationParams,
-} from '../../core/pagination.dto.js';
-import { CreateWorkspaceDto, UpdateWorkspaceDto } from './workspaces.dto.js';
+  CreateWorkspaceDto,
+  GetAllResponse,
+  UpdateWorkspaceDto,
+  WorkspaceResponse,
+} from './workspaces.dto.js';
 import { WorkspacesService } from './workspaces.service.js';
 
 /**
@@ -33,6 +35,7 @@ import { WorkspacesService } from './workspaces.service.js';
  *           application/json:
  *             schema:
  *               type: object
+ *               required: ['data', 'pagination']
  *               properties:
  *                 data:
  *                   type: array
@@ -45,15 +48,17 @@ export class WorkspacesController {
   constructor(private service: WorkspacesService) {}
 
   getAll = async (
-    req: Request<{}, {}, {}, PaginationParams>,
-    res: Response,
+    req: Request<
+      {},
+      {},
+      {},
+      Required<paths['/workspaces']['get']['parameters']['query']>
+    >,
+    res: Response<GetAllResponse>,
   ) => {
-    const { page, limit } = getPaginationParams(
-      req.query.page,
-      req.query.limit,
-    );
+    const { page, limit } = req.query!;
 
-    const result = await this.service.getAll(page, limit);
+    const result = await this.service.getAll(+page, +limit);
 
     res.json(result);
   };
@@ -78,9 +83,12 @@ export class WorkspacesController {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/WorkspaceResponse'
+   *               $ref: '#/components/schemas/WorkspaceResponseWithBoards'
    */
-  getById = async (req: Request<{ id: string }>, res: Response) => {
+  getById = async (
+    req: Request<paths['/workspaces/{id}']['get']['parameters']['path']>,
+    res: Response<WorkspaceResponse>,
+  ) => {
     const { id } = req.params;
 
     const workspace = await this.service.getById(id);
@@ -118,7 +126,10 @@ export class WorkspacesController {
    *             schema:
    *               $ref: '#/components/schemas/WorkspaceResponse'
    */
-  create = async (req: Request<{}, {}, CreateWorkspaceDto>, res: Response) => {
+  create = async (
+    req: Request<{}, {}, CreateWorkspaceDto>,
+    res: Response<WorkspaceResponse>,
+  ) => {
     const body = req.body;
 
     if (!req.user) {
@@ -170,16 +181,23 @@ export class WorkspacesController {
    *               $ref: '#/components/schemas/WorkspaceResponse'
    */
   update = async (
-    req: Request<{ id: string }, UpdateWorkspaceDto>,
-    res: Response,
+    req: Request<
+      paths['/workspaces/{id}']['put']['parameters']['path'],
+      {},
+      UpdateWorkspaceDto
+    >,
+    res: Response<WorkspaceResponse>,
   ) => {
     const { id } = req.params;
+    const body = req.body;
 
-    if (!(await this.service.getById(id))) {
+    const existing = await this.service.getById(id);
+
+    if (!existing) {
       throw new HandlerException(404, 'Воркспейс не найден');
     }
 
-    const workspace = await this.service.update(id, req.body);
+    const workspace = (await this.service.update(id, body))!;
 
     logger.info('Workspace updated', { workspaceId: id });
     res.json(workspace);
@@ -199,24 +217,21 @@ export class WorkspacesController {
    *         schema:
    *           type: string
    *           format: uuid
-   *     responses:
-   *       200:
-   *         description: Воркспейс удален
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/WorkspaceResponse'
    */
-  delete = async (req: Request<{ id: string }>, res: Response) => {
+  delete = async (
+    req: Request<paths['/workspaces/{id}']['delete']['parameters']['path']>,
+    res: Response<void>,
+  ) => {
     const { id } = req.params;
 
-    if (!(await this.service.getById(id))) {
+    const existing = await this.service.getById(id);
+    if (!existing) {
       throw new HandlerException(404, 'Воркспейс не найден');
     }
 
-    const workspace = await this.service.delete(id);
+    await this.service.delete(id);
 
     logger.info('Workspace deleted', { workspaceId: id });
-    res.json(workspace);
+    res.status(200).json();
   };
 }

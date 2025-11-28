@@ -1,43 +1,38 @@
+import { paths } from '../../core/types/api-types.js';
 import { HistoryEntity, HistoryOperation } from './boards.model.js';
 
-export interface CreateBoardDto {
-  name: string;
-  workspaceId: string;
-  private?: boolean;
+export type CreateBoardDto = Omit<
+  paths['/boards']['post']['requestBody']['content']['application/json'],
+  'authorId'
+> & {
   authorId: string;
-}
+};
 
-export interface UpdateBoardDto {
-  name?: string;
-  private?: boolean;
-  workspaceId?: string;
-}
+export type UpdateBoardDto =
+  paths['/boards/{id}']['put']['requestBody']['content']['application/json'] & {};
 
-export interface BoardResponse {
-  id: string;
-  name: string;
-  authorId?: string;
-  workspaceId: string;
-  private: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+export type BoardResponse =
+  paths['/boards/{id}']['put']['responses']['200']['content']['application/json'] & {};
 
-export interface BoardWithStickersResponse extends BoardResponse {
-  maxWidth: number;
-  maxHeight: number;
-  stickers: {
-    id: string;
-    name: string;
-    description: string;
-    meta: {
-      positionX: number;
-      positionY: number;
-      width: number;
-      height: number;
-    };
-  }[];
-}
+export type BoardWithStickersResponse =
+  paths['/boards/{id}']['get']['responses']['200']['content']['application/json'] & {};
+
+export type GetByIdDto =
+  paths['/boards/{id}']['get']['parameters']['query'] & {};
+export type GetAllResponse =
+  paths['/boards']['get']['responses']['200']['content']['application/json'] & {};
+
+export type GetHistoryResponse = Omit<
+  paths['/boards/{id}/history']['get']['responses']['200']['content']['application/json'],
+  'data'
+> & {
+  data: (Omit<
+    paths['/boards/{id}/history']['get']['responses']['200']['content']['application/json']['data'][0],
+    'createdAt'
+  > & {
+    createdAt: Date;
+  })[];
+};
 
 export interface CreateHistoryDto {
   boardId: string;
@@ -48,9 +43,4 @@ export interface CreateHistoryDto {
   key?: string;
   newValue?: string;
   oldValue?: string;
-}
-
-export interface GetByIdDto {
-  width: number;
-  height: number;
 }

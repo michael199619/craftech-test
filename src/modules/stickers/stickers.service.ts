@@ -11,8 +11,11 @@ import { StickersRepository } from './stickers.repository.js';
 export class StickersService {
   constructor(private repo: StickersRepository) {}
 
-  async getAll(dto: GetAllDto) {
-    return await this.repo.findAll(dto);
+  async getAll(dto: GetAllDto): Promise<{ data: StickerResponse[] }> {
+    const stickers = await this.repo.findAll(dto);
+    return {
+      data: stickers.map(this.mapToResponse),
+    };
   }
 
   async getById(id: string): Promise<StickerResponse | null> {
@@ -37,13 +40,16 @@ export class StickersService {
     return sticker ? this.mapToResponse(sticker) : null;
   }
 
-  async delete(id: string, userId?: string): Promise<StickerResponse | null> {
-    const sticker = await this.repo.delete(id, userId);
-    return sticker ? this.mapToResponse(sticker) : null;
+  async delete(id: string, userId?: string) {
+    await this.repo.delete(id, userId);
   }
 
-  async updateStickersPositions(stickers: StickerMetaDto[], userId?: string) {
-    return this.repo.updateStickersPositions(stickers);
+  async updateStickersPositions(
+    stickers: StickerMetaDto[],
+    userId?: string,
+  ): Promise<StickerResponse[]> {
+    const updated = await this.repo.updateStickersPositions(stickers);
+    return updated.map(this.mapToResponse);
   }
 
   private mapToResponse(sticker: Sticker): StickerResponse {

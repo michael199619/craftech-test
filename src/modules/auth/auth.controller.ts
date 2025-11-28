@@ -4,6 +4,7 @@ import authService from '../../core/auth/auth.service.js';
 import { clearSession, getSession, setSession } from '../../core/cookies.js';
 import { HandlerException } from '../../core/error-handler.js';
 import { logger } from '../../core/logger.js';
+import { UserResponse } from '../users/users.dto.js';
 import { UserStatus } from '../users/users.model.js';
 import { UsersService } from '../users/users.service.js';
 import { AuthResponse, LoginDto, SignupDto } from './auth.dto.js';
@@ -44,7 +45,10 @@ import { AuthResponse, LoginDto, SignupDto } from './auth.dto.js';
 export class AuthController {
   constructor(private usersService: UsersService) {}
 
-  signup = async (req: Request<{}, {}, SignupDto>, res: Response) => {
+  signup = async (
+    req: Request<{}, {}, SignupDto>,
+    res: Response<AuthResponse>,
+  ) => {
     const { name, login, password } = req.body;
     const session = getSession(req);
     let user;
@@ -52,7 +56,7 @@ export class AuthController {
     if (session) {
       try {
         user = await getUserBySession(session);
-        console.log(user);
+
         if (user?.status === UserStatus.AUTHORIZED) {
           throw new HandlerException(401, 'Пользователь уже авторизован');
         }
@@ -124,7 +128,10 @@ export class AuthController {
    *             schema:
    *               $ref: '#/components/schemas/AuthResponse'
    */
-  login = async (req: Request<{}, {}, LoginDto>, res: Response) => {
+  login = async (
+    req: Request<{}, {}, LoginDto>,
+    res: Response<AuthResponse>,
+  ) => {
     const { login, password } = req.body;
 
     const user = await this.usersService.findByLogin(login);
@@ -150,7 +157,7 @@ export class AuthController {
       logger.info('User logged in', { userId: user.id, login: user.login });
       res.json(response);
     } catch (error) {
-      logger.warn('Login failed', { login, error: (error as Error).message });
+      logger.warn('Login failed', { login, error });
       throw new HandlerException(401, 'Неверные учетные данные');
     }
   };
@@ -164,7 +171,7 @@ export class AuthController {
    *       - Auth
    *     description: проверятся сессия в куках
    */
-  signout = async (req: Request, res: Response) => {
+  signout = async (req: Request, res: Response<void>) => {
     const session = getSession(req);
     let user;
 
@@ -201,7 +208,7 @@ export class AuthController {
    *             schema:
    *               $ref: '#/components/schemas/AuthResponse'
    */
-  refreshToken = async (req: Request, res: Response) => {
+  refreshToken = async (req: Request, res: Response<AuthResponse>) => {
     const session = getSession(req);
 
     if (!session) {
@@ -248,7 +255,7 @@ export class AuthController {
    *             schema:
    *               $ref: '#/components/schemas/UserResponse'
    */
-  getMe = async (req: Request, res: Response) => {
-    res.json(req.user);
+  getMe = async (req: Request, res: Response<UserResponse>) => {
+    res.json(req.user!);
   };
 }

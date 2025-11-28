@@ -24,15 +24,18 @@ export function setupSwagger(app: Express) {
         schemas: {
           UserResponse: {
             type: 'object',
+            required: ['id', 'name', 'login', 'status'],
             properties: {
               id: { type: 'string', format: 'uuid' },
               name: { type: 'string' },
               login: { type: 'string' },
               status: { type: 'string' },
+              loginedAt: { type: 'string', format: 'date-time' },
             },
           },
           BoardResponse: {
             type: 'object',
+            required: ['id', 'name', 'private'],
             properties: {
               id: { type: 'string', format: 'uuid' },
               name: { type: 'string' },
@@ -46,6 +49,7 @@ export function setupSwagger(app: Express) {
               { $ref: '#/components/schemas/BoardResponse' },
               {
                 type: 'object',
+                required: ['maxWidth', 'maxHeight', 'stickers'],
                 properties: {
                   maxWidth: { type: 'number' },
                   maxHeight: { type: 'number' },
@@ -53,12 +57,20 @@ export function setupSwagger(app: Express) {
                     type: 'array',
                     items: {
                       type: 'object',
+                      required: ['id', 'name', 'description', 'meta'],
                       properties: {
                         id: { type: 'string', format: 'uuid' },
                         name: { type: 'string' },
                         description: { type: 'string' },
                         meta: {
                           type: 'object',
+                          required: [
+                            'positionX',
+                            'positionY',
+                            'width',
+                            'height',
+                            'index',
+                          ],
                           properties: {
                             positionX: { type: 'number' },
                             positionY: { type: 'number' },
@@ -76,16 +88,22 @@ export function setupSwagger(app: Express) {
           },
           StickerResponse: {
             type: 'object',
+            required: ['id', 'name', 'description', 'boardId', 'meta'],
             properties: {
               id: { type: 'string', format: 'uuid' },
               name: { type: 'string' },
               description: { type: 'string' },
               boardId: { type: 'string', format: 'uuid' },
-              stickerMetaId: { type: 'string', format: 'uuid' },
               meta: {
                 type: 'object',
+                required: [
+                  'positionX',
+                  'positionY',
+                  'width',
+                  'height',
+                  'index',
+                ],
                 properties: {
-                  id: { type: 'string', format: 'uuid' },
                   positionX: { type: 'number' },
                   positionY: { type: 'number' },
                   index: { type: 'number' },
@@ -97,14 +115,34 @@ export function setupSwagger(app: Express) {
           },
           WorkspaceResponse: {
             type: 'object',
+            required: ['id', 'name', 'authorId', 'createdAt'],
             properties: {
               id: { type: 'string', format: 'uuid' },
               name: { type: 'string' },
               authorId: { type: 'string', format: 'uuid' },
+              createdAt: { type: 'string', format: 'date-time' },
             },
+          },
+          WorkspaceResponseWithBoards: {
+            allOf: [
+              { $ref: '#/components/schemas/WorkspaceResponse' },
+              {
+                type: 'object',
+                required: ['boards'],
+                properties: {
+                  boards: {
+                    type: 'array',
+                    items: {
+                      $ref: '#/components/schemas/BoardResponse',
+                    },
+                  },
+                },
+              },
+            ],
           },
           AuthResponse: {
             type: 'object',
+            required: ['accessToken', 'refreshToken', 'userId'],
             properties: {
               accessToken: { type: 'string' },
               refreshToken: { type: 'string' },
@@ -113,6 +151,7 @@ export function setupSwagger(app: Express) {
           },
           Pagination: {
             type: 'object',
+            required: ['page', 'limit', 'total', 'totalPage'],
             properties: {
               page: { type: 'integer' },
               limit: { type: 'integer' },
@@ -122,6 +161,7 @@ export function setupSwagger(app: Express) {
           },
           History: {
             type: 'object',
+            required: ['id', 'boardId', 'operation', 'createdAt'],
             properties: {
               id: { type: 'string', format: 'uuid' },
               boardId: { type: 'string', format: 'uuid' },

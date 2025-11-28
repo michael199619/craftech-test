@@ -41,16 +41,13 @@ export class StickersRepository {
   async create(data: CreateStickerDto, userId?: string) {
     const { positionX, positionY, width, height, index, ...stickerData } = data;
 
-    const stickerMeta = await StickerMeta.create(
-      {
-        positionX,
-        positionY,
-        width,
-        height,
-        index,
-      },
-      { userId, individualHooks: true },
-    );
+    const stickerMeta = await StickerMeta.create({
+      positionX,
+      positionY,
+      width,
+      height,
+      index,
+    });
 
     return Sticker.create(
       {
@@ -90,17 +87,38 @@ export class StickersRepository {
   }
 
   async delete(id: string, userId?: string) {
-    const sticker = await this.findById(id);
-
-    if (!sticker) {
-      return null;
-    }
-
     await Sticker.destroy({ where: { id }, individualHooks: true, userId });
-    return sticker;
   }
 
-  async updateStickersPositions(stickers: StickerMetaDto[]) {
-    // стикеры для ws
+  async updateStickersPositions(
+    stickers: StickerMetaDto[],
+  ): Promise<Sticker[]> {
+    const updates = await Promise.all(
+      stickers.map(async (stickerData) => {
+        const sticker = await Sticker.findOne({
+          where: { id: stickerData.id },
+          include: ['meta'],
+        });
+
+        if (!sticker) {
+          return null;
+        }
+
+        const stickerMeta = await StickerMeta.findByPk(sticker.stickerMetaId);
+        if (!stickerMeta) {
+          return null;
+        }
+
+        await stickerMeta.update({
+          positionX: stickerData.positionX,
+          positionY: stickerData.positionY,
+          index: stickerData.index,
+        });
+
+        return this.findById(stickerData.id);
+      }),
+    );
+
+    return updates.filter((sticker): sticker is Sticker => sticker !== null);
   }
 }

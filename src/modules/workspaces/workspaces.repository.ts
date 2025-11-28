@@ -34,7 +34,7 @@ export class WorkspacesRepository {
   }
 
   async create(data: CreateWorkspaceDto) {
-    return Workspace.create(data as any);
+    return Workspace.create(data);
   }
 
   async update(id: string, data: UpdateWorkspaceDto) {
@@ -42,17 +42,12 @@ export class WorkspacesRepository {
       where: { id },
     });
 
-    return this.findById(id);
+    return Workspace.findByPk(id, {
+      attributes: ['id', 'name', 'authorId', 'createdAt'],
+    });
   }
 
   async delete(id: string) {
-    const workspace = await this.findById(id);
-    if (!workspace) {
-      return null;
-    }
-
     await Workspace.destroy({ where: { id } });
-
-    return workspace;
   }
 }

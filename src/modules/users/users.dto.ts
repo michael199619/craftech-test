@@ -1,28 +1,20 @@
-import { UserStatus } from './users.model.js';
+import { paths } from '../../core/types/api-types.js';
 
-export interface CreateUserDto {
-  name: string;
-  login: string;
-  password: string;
-}
-
-export interface UpsertUserDto {
-  id?: string;
-  name?: string;
-  login?: string;
-  password?: string;
-  status?: UserStatus;
-}
+export type UpsertUserDto =
+  paths['/users/{id}']['put']['requestBody']['content']['application/json'] & {
+    id?: string;
+  };
 
 export interface UserResponseWithPassword extends UserResponse {
   password: string;
 }
 
-export interface UserResponse {
-  id: string;
-  name: string;
-  login: string;
-  status: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+export type UserResponse =
+  paths['/users/{id}']['get']['responses']['200']['content']['application/json'] & {};
+
+export type GetAllResponse =
+  paths['/users']['get']['responses']['200']['content']['application/json'] & {};
+
+export type DeleteUserResponse =
+  | paths['/users/{id}']['delete']['responses']['200']['content']['application/json']
+  | {};

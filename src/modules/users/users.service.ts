@@ -1,4 +1,5 @@
 import authService from '../../core/auth/auth.service.js';
+import { PaginationResponse } from '../../core/pagination.dto.js';
 import {
   UpsertUserDto,
   UserResponse,
@@ -10,7 +11,10 @@ import { UsersRepository } from './users.repository.js';
 export class UsersService {
   constructor(private repo: UsersRepository) {}
 
-  async getAll(page: number = 1, limit: number = 20) {
+  async getAll(
+    page: number = 1,
+    limit: number = 20,
+  ): Promise<PaginationResponse<UserResponse>> {
     const result = await this.repo.findAll(page, limit);
 
     return {
@@ -21,13 +25,13 @@ export class UsersService {
 
   async getById(
     id: string,
-    selectPassword: boolean = true,
-  ): Promise<UserResponse | UserResponseWithPassword | null> {
+    selectPassword: boolean = false,
+  ): Promise<UserResponse | null> {
     const user = await this.repo.findById(id, selectPassword);
     return user ? this.mapToResponse(user) : null;
   }
 
-  async findByLogin(login: string, id?: string) {
+  async findByLogin(login: string, id?: string): Promise<User | null> {
     return this.repo.findByLogin(login, id);
   }
 
@@ -44,12 +48,6 @@ export class UsersService {
   }
 
   async delete(id: string): Promise<void> {
-    const user = await this.repo.findById(id);
-
-    if (!user) {
-      return;
-    }
-
     await this.repo.delete(id);
   }
 

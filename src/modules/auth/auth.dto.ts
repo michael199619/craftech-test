@@ -1,20 +1,10 @@
-export interface SignupDto {
-  name: string;
-  login: string;
-  password: string;
-}
+import { paths } from '../../core/types/api-types.js';
 
-export interface LoginDto {
-  login: string;
-  password: string;
-}
+export type SignupDto =
+  paths['/auth/signup']['post']['requestBody']['content']['application/json'] & {};
 
-export interface RefreshTokenDto {
-  refreshToken: string;
-}
+export type LoginDto =
+  paths['/auth/login']['post']['requestBody']['content']['application/json'] & {};
 
-export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
-  userId: string;
-}
+export type AuthResponse =
+  paths['/auth/login']['post']['responses']['200']['content']['application/json'] & {};

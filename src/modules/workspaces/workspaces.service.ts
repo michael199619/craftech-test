@@ -1,7 +1,9 @@
 import {
   CreateWorkspaceDto,
+  GetAllResponse,
   UpdateWorkspaceDto,
   WorkspaceResponse,
+  WorkspaceResponseWithBoards,
 } from './workspaces.dto.js';
 import { Workspace } from './workspaces.model.js';
 import { WorkspacesRepository } from './workspaces.repository.js';
@@ -9,7 +11,7 @@ import { WorkspacesRepository } from './workspaces.repository.js';
 export class WorkspacesService {
   constructor(private repo: WorkspacesRepository) {}
 
-  async getAll(page: number = 1, limit: number = 20) {
+  async getAll(page: number = 1, limit: number = 20): Promise<GetAllResponse> {
     const result = await this.repo.findAll(page, limit);
 
     return {
@@ -18,14 +20,12 @@ export class WorkspacesService {
     };
   }
 
-  async getById(id: string): Promise<WorkspaceResponse | null> {
+  async getById(id: string): Promise<WorkspaceResponseWithBoards | null> {
     const workspace = await this.repo.findById(id);
     return workspace ? this.mapToResponse(workspace) : null;
   }
 
-  async create(
-    data: CreateWorkspaceDto & { authorId: string },
-  ): Promise<WorkspaceResponse> {
+  async create(data: CreateWorkspaceDto): Promise<WorkspaceResponse> {
     const workspace = await this.repo.create(data);
     return this.mapToResponse(workspace);
   }
@@ -38,12 +38,11 @@ export class WorkspacesService {
     return workspace ? this.mapToResponse(workspace) : null;
   }
 
-  async delete(id: string): Promise<WorkspaceResponse | null> {
-    const workspace = await this.repo.delete(id);
-    return workspace ? this.mapToResponse(workspace) : null;
+  async delete(id: string) {
+    await this.repo.delete(id);
   }
 
-  private mapToResponse(workspace: Workspace): WorkspaceResponse {
-    return workspace.toJSON() as WorkspaceResponse;
+  private mapToResponse(workspace: Workspace) {
+    return workspace.toJSON();
   }
 }

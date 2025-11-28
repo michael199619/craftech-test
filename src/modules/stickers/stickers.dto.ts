@@ -1,51 +1,23 @@
-export interface CreateStickerDto {
-  name: string;
-  description: string;
-  boardId: string;
-  positionX?: number;
-  positionY?: number;
-  index?: number;
-  width?: string;
-  height?: number;
-}
+import { paths } from '../../core/types/api-types.js';
 
-export interface UpdateStickerDto {
-  name?: string;
-  description?: string;
-  positionX?: number;
-  positionY?: number;
-  index?: number;
-  width?: string;
-  height?: string;
-}
+export type CreateStickerDto =
+  paths['/stickers']['post']['requestBody']['content']['application/json'] & {};
 
-export interface StickerResponse {
-  id: string;
-  name: string;
-  description: string;
-  boardId: string;
-  createdAt?: Date;
-  meta?: StickerMetaResponse;
-}
+export type UpdateStickerDto =
+  paths['/stickers/{id}']['put']['requestBody']['content']['application/json'] & {};
 
-export interface StickerMetaResponse {
-  positionX: number;
-  positionY: number;
-  index: number;
-  width?: number;
-  height?: number;
-}
+export type StickerResponse =
+  paths['/stickers/{id}']['put']['responses']['200']['content']['application/json'] & {};
 
-export interface GetAllDto {
-  width: number;
-  height: number;
-  boardId: string;
-  exludes?: string[];
-}
+export type GetAllResponse =
+  paths['/stickers']['get']['responses']['200']['content']['application/json'] & {};
 
+export type GetAllDto = paths['/stickers']['get']['parameters']['query'] & {};
 export interface StickerMetaDto {
   id: string;
   positionX: number;
   positionY: number;
+  width: number;
+  height: number;
   index: number;
 }

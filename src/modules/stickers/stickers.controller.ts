@@ -1,10 +1,12 @@
-import { Request,Response } from 'express';
+import { Request, Response } from 'express';
 import { HandlerException } from '../../core/error-handler.js';
 import { logger } from '../../core/logger.js';
+import { paths } from '../../core/types/api-types.js';
 import { BoardsService } from '../boards/boards.service.js';
 import {
   CreateStickerDto,
-  GetAllDto,
+  GetAllResponse,
+  StickerResponse,
   UpdateStickerDto,
 } from './stickers.dto.js';
 import { StickersService } from './stickers.service.js';
@@ -51,6 +53,7 @@ import { StickersService } from './stickers.service.js';
  *           application/json:
  *             schema:
  *               type: object
+ *               required: ['data']
  *               properties:
  *                 data:
  *                   type: array
@@ -61,25 +64,33 @@ export class StickersController {
   constructor(
     private service: StickersService,
     private boardsService: BoardsService,
-  ) { }
+  ) {}
 
-  getAll=async (req: Request<{},{},{},GetAllDto>,res: Response) => {
-    const { width,height,boardId,exludes }=req.query;
-    let ids: string[]=[];
+  getAll = async (
+    req: Request<
+      {},
+      {},
+      {},
+      Required<paths['/stickers']['get']['parameters']['query']>
+    >,
+    res: Response<GetAllResponse>,
+  ) => {
+    const { width, height, boardId, exludes } = req.query!;
+    let ids: string[] = [];
 
     // bug of swagger
     if (exludes) {
-      ids=Array.isArray(exludes)? exludes:[exludes]
+      ids = Array.isArray(exludes) ? exludes : [exludes];
     }
 
-    const data=await this.service.getAll({
+    const result = await this.service.getAll({
       width: +width,
       height: +height,
       boardId: boardId,
-      exludes: ids
+      exludes: ids,
     });
 
-    res.json({ data });
+    res.json(result);
   };
 
   /**
@@ -130,23 +141,28 @@ export class StickersController {
    *             schema:
    *               $ref: '#/components/schemas/StickerResponse'
    */
-  create=async (req: Request<{},{},CreateStickerDto>,res: Response) => {
+  create = async (
+    req: Request<{}, {}, CreateStickerDto>,
+    res: Response<StickerResponse>,
+  ) => {
     if (!req.user) {
-      throw new HandlerException(403,'Отказано в доступе');
+      throw new HandlerException(403, 'Отказано в доступе');
     }
 
+    const body = req.body;
+
     if (
-      !(await this.boardsService.getById(req.body.boardId,{
+      !(await this.boardsService.getById(body.boardId, {
         width: 0,
         height: 0,
       }))
     ) {
-      throw new HandlerException(404,'Не найдена доска');
+      throw new HandlerException(404, 'Не найдена доска');
     }
 
-    const sticker=await this.service.create(req.body,req.user.id);
+    const sticker = await this.service.create(body, req.user.id);
 
-    logger.info('Sticker created',{ stickerId: sticker.id });
+    logger.info('Sticker created', { stickerId: sticker.id });
     res.status(200).json(sticker);
   };
 
@@ -189,22 +205,28 @@ export class StickersController {
    *             schema:
    *               $ref: '#/components/schemas/StickerResponse'
    */
-  update=async (
-    req: Request<{ id: string },{},UpdateStickerDto>,
-    res: Response,
+  update = async (
+    req: Request<
+      paths['/stickers/{id}']['put']['parameters']['path'],
+      {},
+      UpdateStickerDto
+    >,
+    res: Response<StickerResponse>,
   ) => {
-    const { id }=req.params;
+    const { id } = req.params;
+    const body = req.body;
 
     if (!req.user) {
-      throw new HandlerException(403,'Отказано в доступе');
+      throw new HandlerException(403, 'Отказано в доступе');
     }
 
-    const sticker=await this.service.update(id,req.body,req.user.id);
-    if (!sticker) {
-      throw new HandlerException(404,'Стикер не найден');
+    if (!(await this.service.getById(id))) {
+      throw new HandlerException(404, 'Стикер не найден');
     }
 
-    logger.info('Sticker updated',{ stickerId: id });
+    const sticker = (await this.service.update(id, body, req.user.id))!;
+
+    logger.info('Sticker updated', { stickerId: id });
     res.json(sticker);
   };
 
@@ -223,19 +245,24 @@ export class StickersController {
    *           type: string
    *           format: uuid
    */
-  delete=async (req: Request<{ id: string }>,res: Response) => {
-    const { id }=req.params;
+  delete = async (
+    req: Request<paths['/stickers/{id}']['delete']['parameters']['path']>,
+    res: Response<void>,
+  ) => {
+    const { id } = req.params;
 
     if (!req.user) {
-      throw new HandlerException(403,'Отказано в доступе');
+      throw new HandlerException(403, 'Отказано в доступе');
     }
 
-    const sticker=await this.service.delete(id,req.user.id);
+    const sticker = await this.service.getById(id);
     if (!sticker) {
-      throw new HandlerException(404,'Стикер не найден');
+      throw new HandlerException(404, 'Стикер не найден');
     }
 
-    logger.info('Sticker deleted',{ stickerId: id });
+    await this.service.delete(id, req.user.id);
+
+    logger.info('Sticker deleted', { stickerId: id });
     res.status(200).send();
   };
 }

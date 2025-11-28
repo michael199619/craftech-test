@@ -74,7 +74,13 @@ export class BoardsRepository {
           include: [
             {
               association: 'meta',
-              attributes: ['positionX', 'positionY', 'width', 'height'],
+              attributes: [
+                'positionX',
+                'positionY',
+                'width',
+                'height',
+                'index',
+              ],
               required: true,
               where: {
                 positionX: { [Op.lte]: width },

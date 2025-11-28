@@ -16,9 +16,9 @@ cp .env.example .env
 docker-compose up
 ```
 
-swagger - http://localhost:8000/docs
+swagger, если дев режим - http://localhost:8000/docs
 
-ws - http://localhost:8000?board=UUID (для коннекта нужно войти в система, тк нужны куки)
+ws - http://localhost:8000?board=UUID (для коннекта нужно войти в систему, тк нужны куки)
 
 файл инсомнии здесь https://github.com/michael199619/craftech-test/blob/main/assets/insomia.yaml
 
@@ -37,4 +37,12 @@ npm i
 git config core.hooksPath .husky
 docker-compose up postgres redis
 npm run dev
+```
+
+## Generate types of swagger
+
+чтоб сгенерировать типы, нужен дев режим и включенный сваггер. openapi-typescript смотрит файл по адресу http://localhost:8000/docs.json
+
+```bash
+npm run types:gen
 ```

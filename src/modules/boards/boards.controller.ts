@@ -1,12 +1,17 @@
 import { Request, Response } from 'express';
 import { HandlerException } from '../../core/error-handler.js';
 import { logger } from '../../core/logger.js';
-import {
-  getPaginationParams,
-  PaginationParams,
-} from '../../core/pagination.dto.js';
+import { paths } from '../../core/types/api-types.js';
 import { WorkspacesService } from '../workspaces/workspaces.service.js';
-import { CreateBoardDto, GetByIdDto, UpdateBoardDto } from './boards.dto.js';
+import {
+  BoardResponse,
+  BoardWithStickersResponse,
+  CreateBoardDto,
+  GetAllResponse,
+  GetByIdDto,
+  GetHistoryResponse,
+  UpdateBoardDto,
+} from './boards.dto.js';
 import { BoardsService } from './boards.service.js';
 
 /**
@@ -35,6 +40,7 @@ import { BoardsService } from './boards.service.js';
  *           application/json:
  *             schema:
  *               type: object
+ *               required: ['data', 'pagination']
  *               properties:
  *                 data:
  *                   type: array
@@ -50,19 +56,25 @@ export class BoardsController {
   ) {}
 
   getAll = async (
-    req: Request<{}, {}, {}, PaginationParams>,
-    res: Response,
+    req: Request<
+      {},
+      {},
+      {},
+      Required<paths['/boards']['get']['parameters']['query']>
+    >,
+    res: Response<GetAllResponse>,
   ) => {
     if (!req.user) {
       throw new HandlerException(403, 'Отказано в доступе');
     }
 
-    const { page, limit } = getPaginationParams(
-      req.query.page,
-      req.query.limit,
-    );
+    const { page, limit } = req.query!;
 
-    const result = await this.service.getAll(req.user.id, page, limit);
+    if (!req.user?.id) {
+      throw new HandlerException(403, 'Отказано в доступе');
+    }
+
+    const result = await this.service.getAll(req.user.id, +page, +limit);
     res.json(result);
   };
 
@@ -101,11 +113,16 @@ export class BoardsController {
    *               $ref: '#/components/schemas/BoardWithStickersResponse'
    */
   getById = async (
-    req: Request<{ id: string }, {}, {}, GetByIdDto>,
-    res: Response,
+    req: Request<
+      paths['/boards/{id}']['get']['parameters']['path'],
+      {},
+      {},
+      GetByIdDto
+    >,
+    res: Response<BoardWithStickersResponse>,
   ) => {
     const { id } = req.params;
-    const { width, height } = req.query;
+    const { width = 1280, height = 740 } = req.query!;
 
     const board = await this.service.getById(id, {
       width: +width,
@@ -143,14 +160,17 @@ export class BoardsController {
    *                 type: string
    *                 format: uuid
    *     responses:
-   *       201:
+   *       200:
    *         description: Доска создана
    *         content:
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/BoardResponse'
    */
-  create = async (req: Request<{}, {}, CreateBoardDto>, res: Response) => {
+  create = async (
+    req: Request<{}, {}, CreateBoardDto>,
+    res: Response<BoardResponse>,
+  ) => {
     const body = req.body;
 
     if (!req.user) {
@@ -162,6 +182,10 @@ export class BoardsController {
       !(await this.workspaceService.getById(body.workspaceId))
     ) {
       throw new HandlerException(404, 'Workspace не найден');
+    }
+
+    if (!req.user?.id) {
+      throw new HandlerException(403, 'Отказано в доступе');
     }
 
     const board = await this.service.create({
@@ -212,8 +236,12 @@ export class BoardsController {
    *               $ref: '#/components/schemas/BoardResponse'
    */
   update = async (
-    req: Request<{ id: string }, {}, UpdateBoardDto>,
-    res: Response,
+    req: Request<
+      paths['/boards/{id}']['put']['parameters']['path'],
+      {},
+      UpdateBoardDto
+    >,
+    res: Response<BoardResponse>,
   ) => {
     const { id } = req.params;
     const body = req.body;
@@ -253,17 +281,21 @@ export class BoardsController {
    *           type: string
    *           format: uuid
    */
-  delete = async (req: Request<{ id: string }>, res: Response) => {
+  delete = async (
+    req: Request<paths['/boards/{id}']['delete']['parameters']['path']>,
+    res: Response<void>,
+  ) => {
     const { id } = req.params;
 
     if (!req.user) {
       throw new HandlerException(403, 'Отказано в доступе');
     }
 
-    const board = await this.service.delete(id, req.user.id);
-    if (!board) {
+    if (!(await this.service.getById(id, { height: 0, width: 0 }))) {
       throw new HandlerException(404, 'Доска не найдена');
     }
+
+    await this.service.delete(id, req.user.id);
 
     logger.info('Board deleted', { boardId: id });
     res.status(200).json();
@@ -300,6 +332,7 @@ export class BoardsController {
    *           application/json:
    *             schema:
    *               type: object
+   *               required: ['data', 'pagination']
    *               properties:
    *                 data:
    *                   type: array
@@ -309,18 +342,19 @@ export class BoardsController {
    *                   $ref: '#/components/schemas/Pagination'
    */
   getHistory = async (
-    req: Request<{ id: string }, {}, PaginationParams>,
-    res: Response,
+    req: Request<
+      paths['/boards/{id}/history']['get']['parameters']['path'],
+      {},
+      {},
+      Required<paths['/boards/{id}/history']['get']['parameters']['query']>
+    >,
+    res: Response<GetHistoryResponse>,
   ) => {
     const { id } = req.params;
+    const { page, limit } = req.query!;
 
-    const { page, limit } = getPaginationParams(
-      req.query.page,
-      req.query.limit,
-    );
+    const history = await this.service.getHistory(id, +page, +limit);
 
-    const history = await this.service.getHistory(id, page, limit);
-
-    res.json(history);
+    res.status(200).json(history);
   };
 }

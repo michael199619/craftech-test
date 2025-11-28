@@ -6,6 +6,7 @@
     "build": "tsc",
     "dev": "nodemon --inspect ",
     "lint": "eslint --ext .js,.ts .",
+    "types:gen": "openapi-typescript http://localhost:8000/docs.json --output src/core/types/api-types.ts",
     "lint:fix": "eslint --fix --ext .js,.ts .",
     "start": "node dist/app.js",
     "format": "prettier . --write",
@@ -60,6 +61,7 @@
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "nodemon": "^3.1.11",
+    "openapi-typescript": "^7.10.1",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.47.0"

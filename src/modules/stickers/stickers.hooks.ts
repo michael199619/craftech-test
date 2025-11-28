@@ -15,7 +15,6 @@ Sticker.afterCreate(async (sticker: Sticker, options) => {
     name: sticker.name,
     description: sticker.description,
     boardId: sticker.boardId,
-    createdAt: sticker.createdAt,
     meta: {
       positionX: stickerMeta.positionX,
       positionY: stickerMeta.positionY,

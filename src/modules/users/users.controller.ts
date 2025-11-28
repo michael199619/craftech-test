@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { HandlerException } from '../../core/error-handler.js';
 import { logger } from '../../core/logger.js';
+import { paths } from '../../core/types/api-types.js';
 import {
-  getPaginationParams,
-  PaginationParams,
-} from '../../core/pagination.dto.js';
-import { UpsertUserDto } from './users.dto.js';
+  DeleteUserResponse,
+  GetAllResponse,
+  UpsertUserDto,
+  UserResponse,
+} from './users.dto.js';
 import { UsersService } from './users.service.js';
 
 /**
@@ -33,6 +35,7 @@ import { UsersService } from './users.service.js';
  *           application/json:
  *             schema:
  *               type: object
+ *               required: ['data', 'pagination']
  *               properties:
  *                 data:
  *                   type: array
@@ -45,15 +48,17 @@ export class UsersController {
   constructor(private service: UsersService) {}
 
   getAll = async (
-    req: Request<{}, {}, {}, PaginationParams>,
-    res: Response,
+    req: Request<
+      {},
+      {},
+      {},
+      Required<paths['/users']['get']['parameters']['query']>
+    >,
+    res: Response<GetAllResponse>,
   ) => {
-    const { page, limit } = getPaginationParams(
-      req.query.page,
-      req.query.limit,
-    );
+    const { page, limit } = req.query!;
 
-    const result = await this.service.getAll(page, limit);
+    const result = await this.service.getAll(+page, +limit);
 
     res.json(result);
   };
@@ -80,7 +85,10 @@ export class UsersController {
    *             schema:
    *               $ref: '#/components/schemas/UserResponse'
    */
-  getById = async (req: Request<{ id: string }>, res: Response) => {
+  getById = async (
+    req: Request<paths['/users/{id}']['get']['parameters']['path']>,
+    res: Response<UserResponse>,
+  ) => {
     const { id } = req.params;
 
     const user = await this.service.getById(id, false);
@@ -130,8 +138,12 @@ export class UsersController {
    *               $ref: '#/components/schemas/UserResponse'
    */
   update = async (
-    req: Request<{ id: string }, {}, UpsertUserDto>,
-    res: Response,
+    req: Request<
+      paths['/users/{id}']['put']['parameters']['path'],
+      {},
+      UpsertUserDto
+    >,
+    res: Response<UserResponse>,
   ) => {
     const { id } = req.params;
     const body = req.body;
@@ -167,7 +179,10 @@ export class UsersController {
    *           type: string
    *           format: uuid
    */
-  delete = async (req: Request<{ id: string }>, res: Response) => {
+  delete = async (
+    req: Request<paths['/users/{id}']['delete']['parameters']['path']>,
+    res: Response<DeleteUserResponse>,
+  ) => {
     const { id } = req.params;
 
     const user = await this.service.getById(id, false);
@@ -179,6 +194,6 @@ export class UsersController {
     await this.service.delete(id);
 
     logger.info('User deleted', { userId: id });
-    res.status(200).json({ message: 'Пользователь удален' });
+    res.status(200).send();
   };
 }
