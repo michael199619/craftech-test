@@ -96,7 +96,7 @@ export async function handleDragEnd(
   });
 
   try {
-    await stickerService.updateStickersPositions(data.stickers);
+    await stickerService.updateStickersPositions(data.stickers, ws.userId);
 
     logger.debug('Stickers positions saved', {
       userId: ws.userId,

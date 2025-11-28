@@ -39,7 +39,7 @@ docker-compose up postgres redis
 npm run dev
 ```
 
-## Generate types of swagger
+## generate types of swagger
 
 чтоб сгенерировать типы, нужен дев режим и включенный сваггер. openapi-typescript смотрит файл по адресу http://localhost:8000/docs.json
 

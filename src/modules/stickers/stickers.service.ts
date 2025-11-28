@@ -47,12 +47,11 @@ export class StickersService {
   async updateStickersPositions(
     stickers: StickerMetaDto[],
     userId?: string,
-  ): Promise<StickerResponse[]> {
-    const updated = await this.repo.updateStickersPositions(stickers);
-    return updated.map(this.mapToResponse);
+  ): Promise<void> {
+    await this.repo.updateStickersPositions(stickers, userId);
   }
 
   private mapToResponse(sticker: Sticker): StickerResponse {
-    return sticker.toJSON() as StickerResponse;
+    return sticker.toJSON();
   }
 }
