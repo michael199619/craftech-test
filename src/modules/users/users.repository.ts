@@ -49,7 +49,7 @@ export class UsersRepository {
 
     if (id) {
       where.id = {
-        [Op.ne]: id,
+        [Op.not]: id,
       };
     }
 

@@ -56,14 +56,14 @@ export class AuthController {
     if (session) {
       try {
         user = await getUserBySession(session);
-
-        if (user?.status === UserStatus.AUTHORIZED) {
-          throw new HandlerException(401, 'Пользователь уже авторизован');
-        }
       } catch (e) {
         logger.debug('Session is invalid', e);
         clearSession(res);
       }
+    }
+
+    if (user?.status === UserStatus.AUTHORIZED) {
+      throw new HandlerException(401, 'Пользователь уже авторизован');
     }
 
     if (login && (await this.usersService.findByLogin(login, user?.id))) {
