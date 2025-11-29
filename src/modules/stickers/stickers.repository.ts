@@ -34,72 +34,77 @@ export class StickersRepository {
 
   async findById(id: string) {
     return Sticker.findByPk(id, {
-      include: ['meta'],
+      include: [
+        {
+          association: 'meta',
+          attributes: ['positionX', 'positionY', 'width', 'height', 'index'],
+        },
+      ],
     });
   }
 
   async create(data: CreateStickerDto, userId?: string) {
     const { positionX, positionY, width, height, index, ...stickerData } = data;
 
-    const stickerMeta = await StickerMeta.create({
-      positionX,
-      positionY,
-      width,
-      height,
-      index,
+    const sticker = await Sticker.create({
+      ...stickerData,
+      individualHooks: false,
     });
 
-    return Sticker.create(
+    await StickerMeta.create(
       {
-        ...stickerData,
-        stickerMetaId: stickerMeta.id,
+        positionX,
+        positionY,
+        width,
+        height,
+        index,
+        stickerId: sticker.id,
       },
-      { individualHooks: true, userId },
+      { userId },
     );
+
+    return (await this.findById(sticker.id))!;
   }
 
   async update(id: string, data: UpdateStickerDto, userId?: string) {
-    const sticker = await Sticker.findByPk(id);
-    if (!sticker) {
-      return null;
-    }
-
     const { positionX, positionY, index, ...stickerData } = data;
 
-    const stickerMeta = await StickerMeta.findByPk(sticker.stickerMetaId);
-    if (stickerMeta) {
-      await stickerMeta.update(stickerMeta.id, {
-        positionX: positionX || stickerMeta.positionX,
-        positionY: positionY || stickerMeta.positionY,
-        index: index || stickerMeta.index,
-        userId,
-        individualHooks: true,
-      });
+    await Sticker.update(stickerData, {
+      where: { id },
+      userId,
+      individualHooks: true,
+    });
 
-      await Sticker.update(stickerData, {
-        where: { id },
-        individualHooks: true,
+    await StickerMeta.update(
+      {
+        positionX: positionX,
+        positionY: positionY,
+        index: index,
         userId,
-      });
+      },
+      { where: { stickerId: id }, userId, individualHooks: true },
+    );
 
-      return this.findById(id);
-    }
+    return this.findById(id);
   }
 
-  async delete(id: string, userId?: string) {
-    await Sticker.destroy({ where: { id }, individualHooks: true, userId });
+  async delete(ids: string[], userId?: string) {
+    await Sticker.destroy({
+      where: { id: { [Op.in]: ids } },
+      individualHooks: true,
+      userId,
+    });
   }
 
   async updateStickersPositions(stickers: StickerMetaDto[], userId?: string) {
     await Promise.all(
-      stickers.map(async (stickerData) => {
-        await StickerMeta.update(
-          {
-            ...stickerData,
-          },
-          { where: { id: stickerData.id }, userId },
-        );
-      }),
+      stickers.map((stickerData) =>
+        StickerMeta.update(stickerData, {
+          where: { stickerId: stickerData.stickerId },
+          userId,
+          individualHooks: true,
+        }),
+      ),
     );
   }
 }

@@ -481,7 +481,23 @@ export interface paths {
         };
       };
     };
-    delete?: never;
+    /** Удалить стикер */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': {
+            ids: string[];
+          };
+        };
+      };
+      responses: never;
+    };
     options?: never;
     head?: never;
     patch?: never;
@@ -513,6 +529,8 @@ export interface paths {
             positionX?: number;
             positionY?: number;
             index?: number;
+            width?: number;
+            height?: number;
           };
         };
       };
@@ -529,19 +547,7 @@ export interface paths {
       };
     };
     post?: never;
-    /** Удалить стикер */
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          id: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: never;
-    };
+    delete?: never;
     options?: never;
     head?: never;
     patch?: never;

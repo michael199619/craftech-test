@@ -8,7 +8,6 @@ export class Sticker extends Model {
   declare description: string;
   declare createdAt: Date;
   declare boardId: string;
-  declare stickerMetaId: string;
 }
 
 export class StickerMeta extends Model {
@@ -18,6 +17,7 @@ export class StickerMeta extends Model {
   declare height: number;
   declare positionY: number;
   declare index: number;
+  declare stickerId: string;
 }
 
 StickerMeta.init(
@@ -48,6 +48,11 @@ StickerMeta.init(
 
     index: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+
+    stickerId: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
   },
@@ -87,11 +92,6 @@ Sticker.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
-
-    stickerMetaId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
   },
   {
     sequelize,
@@ -105,5 +105,6 @@ Sticker.init(
 Sticker.belongsTo(Board, { foreignKey: 'boardId' });
 Board.hasMany(Sticker, { foreignKey: 'boardId', as: 'stickers' });
 
-Sticker.belongsTo(StickerMeta, { foreignKey: 'stickerMetaId', as: 'meta' });
-StickerMeta.hasOne(Sticker, { foreignKey: 'stickerMetaId' });
+Sticker.hasOne(StickerMeta, { foreignKey: 'stickerId', as: 'meta' });
+// StickerMeta принадлежит Sticker
+StickerMeta.belongsTo(Sticker, { foreignKey: 'stickerId' });

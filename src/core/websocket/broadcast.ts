@@ -7,7 +7,7 @@ import { getBoardRoom } from './rooms.js';
 export function broadcastToBoard<E extends ClientEvents>(
   boardId: string,
   event: E,
-  payload: Payload[E],
+  payload: Payload[E] & { userId?: string },
 ) {
   const room = getBoardRoom(boardId);
 
@@ -16,7 +16,7 @@ export function broadcastToBoard<E extends ClientEvents>(
     return;
   }
 
-  const message: WSEventResponse = { event, payload };
+  const message: WSEventResponse<E> = { event, payload };
   const messageStr = JSON.stringify(message);
 
   let sentCount = 0;

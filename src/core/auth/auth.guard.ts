@@ -81,7 +81,7 @@ export const authGuard = async (
         userId: anonymousUser.id,
       });
     } else {
-      usersService.upsert({
+      await usersService.upsert({
         ...user,
         status: UserStatus.AUTHORIZED,
       });

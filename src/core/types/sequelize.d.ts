@@ -5,6 +5,7 @@ declare module 'sequelize' {
   interface CreateOptions {
     userId?: string;
   }
+
   interface UpdateOptions {
     userId?: string;
     individualHooks?: boolean;

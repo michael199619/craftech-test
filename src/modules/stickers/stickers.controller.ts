@@ -5,6 +5,7 @@ import { paths } from '../../core/types/api-types.js';
 import { BoardsService } from '../boards/boards.service.js';
 import {
   CreateStickerDto,
+  DeleteDto,
   GetAllResponse,
   StickerResponse,
   UpdateStickerDto,
@@ -197,6 +198,10 @@ export class StickersController {
    *                 type: number
    *               index:
    *                 type: number
+   *               width:
+   *                 type: number
+   *               height:
+   *                 type: number
    *     responses:
    *       200:
    *         description: Стикер обновлен
@@ -220,49 +225,49 @@ export class StickersController {
       throw new HandlerException(403, 'Отказано в доступе');
     }
 
-    if (!(await this.service.getById(id))) {
+    const sticker = await this.service.getById(id);
+
+    if (!sticker) {
       throw new HandlerException(404, 'Стикер не найден');
     }
 
-    const sticker = (await this.service.update(id, body, req.user.id))!;
+    const upd = (await this.service.update(id, body, req.user.id))!;
 
     logger.info('Sticker updated', { stickerId: id });
-    res.json(sticker);
+    res.json(upd);
   };
 
   /**
    * @openapi
-   * /stickers/{id}:
+   * /stickers:
    *   delete:
    *     summary: Удалить стикер
    *     tags:
    *       - Stickers
-   *     parameters:
-   *       - in: path
-   *         name: id
-   *         required: true
-   *         schema:
-   *           type: string
-   *           format: uuid
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: ['ids']
+   *             properties:
+   *               ids:
+   *                 type: array
+   *                 items:
+   *                   type: string
+   *                   format: uuid
    */
-  delete = async (
-    req: Request<paths['/stickers/{id}']['delete']['parameters']['path']>,
-    res: Response<void>,
-  ) => {
-    const { id } = req.params;
+  delete = async (req: Request<{}, never, DeleteDto>, res: Response<void>) => {
+    const { ids } = req.body;
 
     if (!req.user) {
       throw new HandlerException(403, 'Отказано в доступе');
     }
 
-    const sticker = await this.service.getById(id);
-    if (!sticker) {
-      throw new HandlerException(404, 'Стикер не найден');
-    }
+    await this.service.delete(ids, req.user.id);
 
-    await this.service.delete(id, req.user.id);
-
-    logger.info('Sticker deleted', { stickerId: id });
+    logger.info('Sticker deleted', { stickerId: ids });
     res.status(200).send();
   };
 }

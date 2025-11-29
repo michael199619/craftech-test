@@ -7,6 +7,7 @@ import {
   GetAllResponse,
   UpdateWorkspaceDto,
   WorkspaceResponse,
+  WorkspaceResponseWithBoards,
 } from './workspaces.dto.js';
 import { WorkspacesService } from './workspaces.service.js';
 
@@ -87,7 +88,7 @@ export class WorkspacesController {
    */
   getById = async (
     req: Request<paths['/workspaces/{id}']['get']['parameters']['path']>,
-    res: Response<WorkspaceResponse>,
+    res: Response<WorkspaceResponseWithBoards>,
   ) => {
     const { id } = req.params;
 

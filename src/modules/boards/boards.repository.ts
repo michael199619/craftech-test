@@ -96,7 +96,7 @@ export class BoardsRepository {
             Sequelize.literal(`(
               SELECT COALESCE(MAX(m."positionX" +m.width), 0)
               FROM "Sticker" s
-              LEFT JOIN "StickerMeta" m on m.id = s."stickerMetaId"
+              LEFT JOIN "StickerMeta" m on m."stickerId" = s.id
               WHERE s."boardId" = "Board"."id"
             )`),
             'maxWidth',
@@ -105,7 +105,7 @@ export class BoardsRepository {
             Sequelize.literal(`(
               SELECT COALESCE(MAX(m."positionY" + m.height), 0)
               FROM "Sticker" s
-              INNER JOIN "StickerMeta" m on m.id = s."stickerMetaId"
+              INNER JOIN "StickerMeta" m on m."stickerId" = s.id
               WHERE s."boardId" = "Board"."id"
             )`),
             'maxHeight',

@@ -7,8 +7,8 @@ import { Sticker, StickerMeta } from './stickers.model.js';
 
 const ignoreFields: string[] = ['updatedAt', 'createdAt'];
 
-Sticker.afterCreate(async (sticker: Sticker, options) => {
-  const stickerMeta = (await StickerMeta.findByPk(sticker.stickerMetaId))!;
+StickerMeta.afterCreate(async (stickerMeta: StickerMeta, options) => {
+  const sticker = (await Sticker.findByPk(stickerMeta.stickerId))!;
 
   broadcastToBoard(sticker.boardId, ClientEvents.STICKER_CREATE, {
     id: sticker.id,
@@ -28,10 +28,10 @@ Sticker.afterCreate(async (sticker: Sticker, options) => {
     {
       boardId: sticker.boardId,
       authorId: options.userId,
-      operation: HistoryOperation.CREATE,
-      entityName: HistoryEntity.STICKER,
-      entityId: sticker.id,
-      key: sticker.name,
+      operation: HistoryOperation.UPDATE,
+      entityId: stickerMeta.id,
+      entityName: HistoryEntity.STICKER_META,
+      key: 'name',
       newValue: sticker.name,
     },
   ]);
@@ -47,11 +47,14 @@ Sticker.afterUpdate(async (sticker: Sticker, options) => {
   const fields = changedFields.filter(
     (field) => ignoreFields.indexOf(field) === -1,
   );
+
   if (!fields.length) {
     return;
   }
 
-  const stickerMeta = (await StickerMeta.findByPk(sticker.stickerMetaId))!;
+  const stickerMeta = (await StickerMeta.findOne({
+    where: { stickerId: sticker.id },
+  }))!;
 
   broadcastToBoard(sticker.boardId, ClientEvents.STICKER_UPDATE, {
     id: sticker.id,
@@ -116,13 +119,12 @@ StickerMeta.afterUpdate(async (stickerMeta: StickerMeta, options) => {
   const fields = changedFields.filter(
     (field) => ignoreFields.indexOf(field) === -1,
   );
+
   if (!fields.length) {
     return;
   }
 
-  const sticker = (await Sticker.findOne({
-    where: { stickerMetaId: stickerMeta.id },
-  }))!;
+  const sticker = (await Sticker.findByPk(stickerMeta.stickerId))!;
 
   broadcastToBoard(sticker.boardId, ClientEvents.STICKER_UPDATE, {
     id: sticker.id,

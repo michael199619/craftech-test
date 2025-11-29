@@ -12,9 +12,12 @@ export type StickerResponse =
 export type GetAllResponse =
   paths['/stickers']['get']['responses']['200']['content']['application/json'] & {};
 
+export type DeleteDto =
+  paths['/stickers']['delete']['requestBody']['content']['application/json'] & {};
+
 export type GetAllDto = paths['/stickers']['get']['parameters']['query'] & {};
 export interface StickerMetaDto {
-  id: string;
+  stickerId: string;
   positionX: number;
   positionY: number;
   width: number;

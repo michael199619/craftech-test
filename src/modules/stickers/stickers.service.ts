@@ -40,8 +40,8 @@ export class StickersService {
     return sticker ? this.mapToResponse(sticker) : null;
   }
 
-  async delete(id: string, userId?: string) {
-    await this.repo.delete(id, userId);
+  async delete(ids: string[], userId?: string) {
+    await this.repo.delete(ids, userId);
   }
 
   async updateStickersPositions(

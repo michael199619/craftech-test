@@ -30,28 +30,24 @@ export interface LeaveBoardPayload {
 }
 
 export interface DragStartPayload {
-  userId?: string;
   stickers: StickerMetaDto[];
 }
 
 export interface DragEndPayload {
-  userId?: string;
   stickers: StickerMetaDto[];
 }
 
 export interface UserOnlinePayload {
-  userId: string;
   isOnline: boolean;
 }
 
 export interface ObjectDelete {
   id: string;
-  userId?: string;
 }
 
-export interface WSEventResponse {
+export interface WSEventResponse<E extends ClientEvents> {
   event: ClientEvents;
-  payload?: any;
+  payload: Payload[E];
   error?: string;
 }
 
@@ -64,6 +60,6 @@ export interface Payload {
   [ClientEvents.USER_JOIN]: JoinBoardPayload;
   [ClientEvents.USER_LEFT]: LeaveBoardPayload;
   [ClientEvents.USER_ONLINE]: UserOnlinePayload;
-  [ClientEvents.ERROR]: WSEventResponse;
+  [ClientEvents.ERROR]: WSEventResponse<ClientEvents>;
   [ClientEvents.BOARD_DELETE]: ObjectDelete;
 }
